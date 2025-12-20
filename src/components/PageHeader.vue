@@ -10,7 +10,7 @@
           <a href="#testimonials" @click.prevent="scrollToSection('#testimonials')">Reviews</a>
         </li>
       </ul>
-      <button class="nav-cta">Começar</button>
+      <button class="nav-cta" @click="$emit('open-login')">ENTRAR</button>
     </nav>
   </header>
 </template>

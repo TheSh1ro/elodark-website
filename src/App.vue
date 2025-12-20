@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
+
 import PageFooter from './components/PageFooter.vue'
 import PageHeader from './components/PageHeader.vue'
+import LoginPanel from './components/LoginPanel.vue'
+
+const isLoginOpen = ref(false)
 
 const handleMouseMove = (e: MouseEvent) => {
   if (Math.random() > 0.5) {
@@ -48,9 +53,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <PageHeader />
+  <PageHeader @open-login="isLoginOpen = true" />
   <RouterView />
   <PageFooter />
+  <LoginPanel v-model="isLoginOpen" />
 </template>
 
 <style>
