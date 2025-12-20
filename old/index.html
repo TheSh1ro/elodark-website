@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ELODARK</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="scanline"></div>
+
+    <!-- Header -->
+    <header>
+      <nav>
+        <div class="logo">ELODARK</div>
+        <ul class="nav-menu">
+          <li><a href="#home">Início</a></li>
+          <li><a href="#boosters">Boosters</a></li>
+          <li><a href="#services">Serviços</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
+        </ul>
+        <button class="nav-cta">Começar</button>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-glitch">
+          CONQUISTE SEU<br />
+          <span class="text-gradient">ELO MERECIDO</span>
+        </h1>
+        <p class="hero-subtitle">Boosters qualificados // Personalização // Resultado Garantido</p>
+        <div class="hero-buttons">
+          <button class="btn-3d btn-primary-3d" onclick="scrollTo('#packages')">CONTRATAR</button>
+          <button class="btn-3d btn-secondary-3d" onclick="scrollTo('#services')">
+            SABER MAIS
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-number">15K+</div>
+        <div class="stat-label">Clientes Atendidos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">90%</div>
+        <div class="stat-label">Taxa de Vitória</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">24 / 7</div>
+        <div class="stat-label">Suporte Online</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Segurança</div>
+      </div>
+    </div>
+
+    <section class="boosters" id="boosters">
+      <h2 class="section-title">NOSSO ESQUADRÃO</h2>
+      <p class="section-subtitle">Elite dos melhores jogadores do servidor brasileiro</p>
+
+      <div class="carousel-container">
+        <button class="carousel-view-3d" id="view3dBtn"><i class="fas fa-cube"></i> 3D View</button>
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="carouselTrack">
+            <!-- Booster 1 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">DX</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">DarkXion</h3>
+                  <span class="booster-rank">Grão-Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">94%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">1.2K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Mid</span>
+                <span class="specialty-tag">Jungle</span>
+                <span class="specialty-tag">Assassinos</span>
+              </div>
+            </div>
+
+            <!-- Booster 2 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">NV</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Nev0ltz</h3>
+                  <span class="booster-rank">Desafiante</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">91%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">2.5K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">ADC</span>
+                <span class="specialty-tag">Top</span>
+                <span class="specialty-tag">Carry</span>
+              </div>
+            </div>
+
+            <!-- Booster 3 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">PH</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Phantom</h3>
+                  <span class="booster-rank">Grão-Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">89%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">980+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Support</span>
+                <span class="specialty-tag">Mid</span>
+                <span class="specialty-tag">Utility</span>
+              </div>
+            </div>
+
+            <!-- Booster 4 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">VX</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Vortex</h3>
+                  <span class="booster-rank">Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">92%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">1.5K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Jungle</span>
+                <span class="specialty-tag">Top</span>
+                <span class="specialty-tag">Tanks</span>
+              </div>
+            </div>
+
+            <!-- Booster 5 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">ZR</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Zer0Kill</h3>
+                  <span class="booster-rank">Grão-Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">96%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">850+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Mid</span>
+                <span class="specialty-tag">ADC</span>
+                <span class="specialty-tag">Mages</span>
+              </div>
+            </div>
+
+            <!-- Booster 6 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">CY</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Cypher</h3>
+                  <span class="booster-rank">Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">88%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">1.1K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Top</span>
+                <span class="specialty-tag">Jungle</span>
+                <span class="specialty-tag">Bruisers</span>
+              </div>
+            </div>
+
+            <!-- Booster 7 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">RG</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Rogue</h3>
+                  <span class="booster-rank">Desafiante</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">93%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">2.1K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Support</span>
+                <span class="specialty-tag">ADC</span>
+                <span class="specialty-tag">Enchanters</span>
+              </div>
+            </div>
+
+            <!-- Booster 8 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">NX</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Nexus</h3>
+                  <span class="booster-rank">Grão-Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">90%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">1.8K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Mid</span>
+                <span class="specialty-tag">Support</span>
+                <span class="specialty-tag">Control</span>
+              </div>
+            </div>
+
+            <!-- Booster 9 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">AP</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Apex</h3>
+                  <span class="booster-rank">Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">87%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">1.4K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Jungle</span>
+                <span class="specialty-tag">Top</span>
+                <span class="specialty-tag">Fighters</span>
+              </div>
+            </div>
+
+            <!-- Booster 10 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">TN</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Titan</h3>
+                  <span class="booster-rank">Grão-Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">95%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">920+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Top</span>
+                <span class="specialty-tag">Mid</span>
+                <span class="specialty-tag">Split Push</span>
+              </div>
+            </div>
+
+            <!-- Booster 11 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">EC</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Eclipse</h3>
+                  <span class="booster-rank">Desafiante</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">92%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">2.8K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">ADC</span>
+                <span class="specialty-tag">Mid</span>
+                <span class="specialty-tag">Marksmen</span>
+              </div>
+            </div>
+
+            <!-- Booster 12 -->
+            <div class="booster-card">
+              <div class="booster-header">
+                <div class="booster-avatar">SH</div>
+                <div class="booster-info">
+                  <h3 class="booster-name">Shadow</h3>
+                  <span class="booster-rank">Mestre</span>
+                </div>
+              </div>
+              <div class="booster-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Winrate</span>
+                  <span class="stat-value">89%</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Jogos</span>
+                  <span class="stat-value">1.6K+</span>
+                </div>
+              </div>
+              <div class="booster-specialty">
+                <span class="specialty-tag">Jungle</span>
+                <span class="specialty-tag">Mid</span>
+                <span class="specialty-tag">Roaming</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <button class="carousel-nav prev" id="prevBtn"></button>
+        <button class="carousel-nav next" id="nextBtn"></button>
+
+        <!-- Indicators -->
+        <div class="carousel-indicators" id="indicators"></div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services" id="services">
+      <h2 class="section-title">SERVIÇOS DE BOOST</h2>
+      <p class="section-subtitle">Ascenda ao elo que você deseja atingir</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon"></div>
+          <h3 class="service-title">Proteção Máxima</h3>
+          <p class="service-desc">
+            VPN e outros métodos para evitar qualquer detecção. Sua conta 100% segura.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"></div>
+          <h3 class="service-title">Boost Turbo</h3>
+          <p class="service-desc">
+            Boosters jogando 24/7 com 90%+ winrate. Alcance seu elo em tempo recorde.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"></div>
+          <h3 class="service-title">Jogadores 0.1%</h3>
+          <p class="service-desc">
+            Nossa equipe é composta por jogadores habilidosos que dominam a SoloQ brasileira.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"></div>
+          <h3 class="service-title">Acompanhe</h3>
+          <p class="service-desc">
+            Assista cada partida em tempo real através do nosso servidor de Discord.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"></div>
+          <h3 class="service-title">Garantia Premium</h3>
+          <p class="service-desc">Se arrependeu? Reembolsamos o valor, basta entrar em contato.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"></div>
+          <h3 class="service-title">Privacidade</h3>
+          <p class="service-desc">
+            Garantimos total sigilo sobre a compra do seu serviço e a realização do mesmo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Packages -->
+    <section class="packages" id="packages">
+      <h2 class="section-title">ESCOLHA SEU PACOTE</h2>
+      <p class="section-subtitle">Selecione o serviço que melhor se adequa ao seu objetivo</p>
+      <div class="packages-grid">
+        <div class="package-card">
+          <div class="package-badge">POPULAR</div>
+          <div class="package-icon">#1</div>
+          <h3 class="package-name">EloJob</h3>
+          <p class="package-desc">Boost completo sem sua participação</p>
+          <div class="package-features">
+            <div class="package-feature">Menor preço</div>
+            <div class="package-feature">Entrega rápida</div>
+            <div class="package-feature">VPN + Proteção</div>
+            <div class="package-feature">Suporte 24/7</div>
+          </div>
+          <button class="package-button">COMPRAR AGORA</button>
+        </div>
+        <div class="package-card">
+          <div class="package-icon">/\</div>
+          <h3 class="package-name">DuoJob</h3>
+          <p class="package-desc">Suba de elo enquanto recebe feedbacks</p>
+          <div class="package-features">
+            <div class="package-feature">Absorva enquanto joga</div>
+            <div class="package-feature">Com ou sem Discord</div>
+            <div class="package-feature">Horário combinado</div>
+            <div class="package-feature">Suporte 24/7</div>
+          </div>
+          <button class="package-button">COMEÇAR DUO</button>
+        </div>
+        <div class="package-card">
+          <div class="package-icon">///</div>
+          <h3 class="package-name">VITÓRIAS</h3>
+          <p class="package-desc">Compre vitórias e gerencie o seu decay</p>
+          <div class="package-features">
+            <div class="package-feature">Agende as partidas</div>
+            <div class="package-feature">Com ou sem duo</div>
+            <div class="package-feature">VPN + Proteção</div>
+            <div class="package-feature">Suporte 24/7</div>
+          </div>
+          <button class="package-button">Comprar vitórias</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+      <h2 class="section-title">HALL OF FAME</h2>
+      <p class="section-subtitle">O que nossos invocadores dizem</p>
+      <div class="testimonials-container">
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">J</div>
+            <div class="testimonial-info">
+              <h4>JadeRoc</h4>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">
+            Saí do Ouro para Diamante em 5 dias. Os caras são monstros, 100% de winrate nas minhas
+            partidas. Valeu cada centavo!
+          </p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">O</div>
+            <div class="testimonial-info">
+              <h4>Octodoggo</h4>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">
+            Melhor serviço de boost que já usei. A velocidade em que o booster subiu a conta foi
+            demais, e deu pra assistir cada partida. Suporte nota 10!
+          </p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">S</div>
+            <div class="testimonial-info">
+              <h4>Surfis</h4>
+              <div class="stars">★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">
+            Comprei uma smurf na elodark e os cara falou que n ia me dar conta nenhuma e me chamou
+            de negueba
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-logo">ELODARK</div>
+        <p class="footer-subtitle">A plataforma de boost mais confiável do Brasil</p>
+        <div class="social-links">
+          <a href="#">＠</a>
+          <a href="#">◆</a>
+          <a href="#">▶</a>
+          <a href="#">✉</a>
+        </div>
+        <p class="footer-copyright">© 2026 ELODARK. Todos os direitos reservados.</p>
+        <p class="footer-notice">Não afiliado ou endossado pela Riot Games</p>
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="background.js"></script>
+    <script src="animations.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
