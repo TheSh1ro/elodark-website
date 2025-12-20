@@ -1,4 +1,3 @@
-Me ajude a fazer o efeito visual ficar mais legal ```vue
 <template>
   <canvas id="bg-canvas" class="three-bg"></canvas>
 </template>
@@ -8,23 +7,13 @@ import { onMounted, onUnmounted } from 'vue'
 import * as THREE from 'three'
 
 const CONFIG = {
-  textCloud: {
-    count: 400,
-    words: ['+27', '+25', '+23', 'GG', 'NIHAO', 'CN', 'NIGGA'],
-    rotationSpeed: 0.001,
-    spread: 350,
-  },
-  text: {
-    font: 'Bold 80px Arial',
-    color: '#4cba9d',
-    shadowBlur: 15,
-    opacity: 0.7,
-    minSize: 5,
-    maxSize: 15,
-  },
-  canvas: {
-    width: 256,
-    height: 128,
+  particles: {
+    count: 2000,
+    size: 0.3,
+    color: 0x4cba9d,
+    opacity: 0.8,
+    rotationSpeed: 0.0005,
+    spread: 200,
   },
 }
 
@@ -43,60 +32,30 @@ onMounted(() => {
   renderer.setSize(window.innerWidth, window.innerHeight)
   camera.position.z = 50
 
-  function createTextSprite(text: string) {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')!
-    canvas.width = CONFIG.canvas.width
-    canvas.height = CONFIG.canvas.height
+  // Create particles
+  const particlesGeometry = new THREE.BufferGeometry()
+  const particlesCount = CONFIG.particles.count
+  const posArray = new Float32Array(particlesCount * 3)
 
-    ctx.font = CONFIG.text.font
-    ctx.fillStyle = CONFIG.text.color
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.shadowColor = CONFIG.text.color
-    ctx.shadowBlur = CONFIG.text.shadowBlur
-    ctx.fillText(text, canvas.width / 2, canvas.height / 2)
-
-    const texture = new THREE.CanvasTexture(canvas)
-    const material = new THREE.SpriteMaterial({
-      map: texture,
-      transparent: true,
-      opacity: CONFIG.text.opacity,
-    })
-
-    const sprite = new THREE.Sprite(material)
-    sprite.scale.set(8, 4, 1)
-    return sprite
+  for (let i = 0; i < particlesCount * 3; i++) {
+    posArray[i] = (Math.random() - 0.5) * CONFIG.particles.spread
   }
 
-  const textCloud = new THREE.Group()
+  particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3))
 
-  for (let i = 0; i < CONFIG.textCloud.count; i++) {
-    const randomWord =
-      CONFIG.textCloud.words[Math.floor(Math.random() * CONFIG.textCloud.words.length)]
+  const particlesMaterial = new THREE.PointsMaterial({
+    size: CONFIG.particles.size,
+    color: CONFIG.particles.color,
+    transparent: true,
+    opacity: CONFIG.particles.opacity,
+  })
 
-    if (!randomWord) return
-
-    const sprite = createTextSprite(randomWord)
-
-    sprite.position.set(
-      (Math.random() - 0.5) * CONFIG.textCloud.spread,
-      (Math.random() - 0.5) * CONFIG.textCloud.spread,
-      (Math.random() - 0.5) * CONFIG.textCloud.spread,
-    )
-
-    const randomSize =
-      CONFIG.text.minSize + Math.random() * (CONFIG.text.maxSize - CONFIG.text.minSize)
-    sprite.scale.set(randomSize, randomSize / 2, 1)
-
-    textCloud.add(sprite)
-  }
-
-  scene.add(textCloud)
+  const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial)
+  scene.add(particlesMesh)
 
   function animate() {
     animationId = requestAnimationFrame(animate)
-    textCloud.rotation.y += CONFIG.textCloud.rotationSpeed
+    particlesMesh.rotation.y += CONFIG.particles.rotationSpeed
     renderer.render(scene, camera)
   }
 
@@ -137,4 +96,3 @@ onUnmounted(() => {
   pointer-events: none;
 }
 </style>
-```
