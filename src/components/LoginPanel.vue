@@ -273,7 +273,7 @@ onBeforeUnmount(() => {
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  position: absolute;
+  position: fixed;
 }
 
 /* Close Button */

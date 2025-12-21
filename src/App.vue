@@ -1,63 +1,91 @@
-<script setup lang="ts">
-import { onMounted, onBeforeUnmount } from 'vue'
-import { ref } from 'vue'
-
-import PageFooter from './components/PageFooter.vue'
-import PageHeader from './components/PageHeader.vue'
-import LoginPanel from './components/LoginPanel.vue'
-
-const isLoginOpen = ref(false)
-
-const handleMouseMove = (e: MouseEvent) => {
-  if (Math.random() > 0.85) {
-    const particle = document.createElement('div')
-    particle.className = 'particle'
-    particle.style.left = e.clientX + 'px'
-    particle.style.top = e.clientY + 'px'
-    particle.style.width = '3px'
-    particle.style.height = '3px'
-    // Usando as cores do :root
-    const rootStyles = getComputedStyle(document.documentElement)
-    const primary = rootStyles.getPropertyValue('--primary') || '#4cba9d'
-    particle.style.background = primary.trim()
-    particle.style.borderRadius = '50%'
-    particle.style.boxShadow = `0 0 10px ${primary.trim()}`
-    particle.style.position = 'fixed'
-    particle.style.pointerEvents = 'none'
-    particle.style.zIndex = '9999'
-    document.body.appendChild(particle)
-
-    setTimeout(() => {
-      particle.style.opacity = '0'
-      particle.style.transform = 'scale(0)'
-      particle.style.transition = 'all 0.5s'
-    }, 100)
-
-    setTimeout(() => {
-      particle.remove()
-    }, 600)
-  }
-}
-
-const initParticles = () => {
-  document.addEventListener('mousemove', handleMouseMove)
-}
-
-onMounted(() => {
-  initParticles()
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('mousemove', handleMouseMove)
-})
-</script>
-
 <template>
   <PageHeader @open-login="isLoginOpen = true" />
   <RouterView />
   <PageFooter />
+  <!-- <AudioPlayer audio-src="../public/audio/Audio.mp3" :autoplay="false" /> -->
   <LoginPanel v-model="isLoginOpen" />
+  <ModalNotification
+    v-model="isOpen"
+    :title="config.title"
+    :message="config.message"
+    :button-text="config.buttonText"
+  />
 </template>
+
+<script setup lang="ts">
+import { onMounted, onBeforeUnmount, ref } from 'vue'
+import PageHeader from './components/PageHeader.vue'
+import PageFooter from './components/PageFooter.vue'
+// import AudioPlayer from './components/AudioPlayer.vue'
+import LoginPanel from './components/LoginPanel.vue'
+
+import ModalNotification from '@/components/ModalNotification.vue'
+import { useModal } from '@/composables/useModal'
+
+const { isOpen, config } = useModal()
+const isLoginOpen = ref(false)
+
+let lastParticleTime = 0
+const PARTICLE_THROTTLE = 50
+const particles = new Set<HTMLDivElement>()
+
+const createParticle = (x: number, y: number) => {
+  const particle = document.createElement('div')
+  particle.className = 'particle'
+
+  const rootStyles = getComputedStyle(document.documentElement)
+  const primary = rootStyles.getPropertyValue('--primary').trim() || '#4cba9d'
+
+  Object.assign(particle.style, {
+    left: `${x}px`,
+    top: `${y}px`,
+    width: '3px',
+    height: '3px',
+    background: primary,
+    borderRadius: '50%',
+    boxShadow: `0 0 10px ${primary}`,
+    position: 'fixed',
+    pointerEvents: 'none',
+    zIndex: '9999',
+    transition: 'all 0.5s ease-out',
+  })
+
+  document.body.appendChild(particle)
+  particles.add(particle)
+
+  requestAnimationFrame(() => {
+    particle.style.opacity = '0'
+    particle.style.transform = 'scale(0) translateY(-20px)'
+  })
+
+  setTimeout(() => {
+    particle.remove()
+    particles.delete(particle)
+  }, 500)
+}
+
+const handleMouseMove = (e: MouseEvent) => {
+  const now = Date.now()
+
+  if (now - lastParticleTime < PARTICLE_THROTTLE) return
+  if (Math.random() > 0.9) return
+
+  lastParticleTime = now
+  createParticle(e.clientX, e.clientY)
+}
+
+const cleanup = () => {
+  document.removeEventListener('mousemove', handleMouseMove)
+  particles.forEach((p) => p.remove())
+  particles.clear()
+}
+
+onMounted(() => {
+  document.addEventListener('mousemove', handleMouseMove, { passive: true })
+})
+
+onBeforeUnmount(cleanup)
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');

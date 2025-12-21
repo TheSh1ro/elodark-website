@@ -36,6 +36,7 @@ footer {
   margin-bottom: 1rem;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

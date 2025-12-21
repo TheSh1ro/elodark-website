@@ -15,10 +15,19 @@ const CONFIG = {
     rotationSpeed: 0.0005,
     spread: 200,
   },
+  connections: {
+    maxDistance: 15, // Distância máxima para conectar partículas
+    lineColor: 0x4cba9d,
+    lineOpacity: 0.3,
+  },
 }
 
 let animationId: number
 let renderer: THREE.WebGLRenderer
+let particlesMesh: THREE.Points
+let linesMesh: THREE.LineSegments
+let particlesGeometry: THREE.BufferGeometry
+let linesGeometry: THREE.BufferGeometry
 
 onMounted(() => {
   const scene = new THREE.Scene()
@@ -33,7 +42,7 @@ onMounted(() => {
   camera.position.z = 50
 
   // Create particles
-  const particlesGeometry = new THREE.BufferGeometry()
+  particlesGeometry = new THREE.BufferGeometry()
   const particlesCount = CONFIG.particles.count
   const posArray = new Float32Array(particlesCount * 3)
 
@@ -50,12 +59,64 @@ onMounted(() => {
     opacity: CONFIG.particles.opacity,
   })
 
-  const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial)
+  particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial)
   scene.add(particlesMesh)
+
+  // Create lines geometry
+  linesGeometry = new THREE.BufferGeometry()
+  const linesMaterial = new THREE.LineBasicMaterial({
+    color: CONFIG.connections.lineColor,
+    transparent: true,
+    opacity: CONFIG.connections.lineOpacity,
+  })
+  linesMesh = new THREE.LineSegments(linesGeometry, linesMaterial)
+  scene.add(linesMesh)
+
+  function updateConnections() {
+    if (!particlesGeometry.attributes.position) return
+
+    const positions = particlesGeometry.attributes.position.array as Float32Array
+    const linePositions: number[] = []
+    const particlesCount = CONFIG.particles.count
+
+    // Conectar partículas próximas
+    for (let i = 0; i < particlesCount; i++) {
+      const x1 = positions[i * 3]
+      const y1 = positions[i * 3 + 1]
+      const z1 = positions[i * 3 + 2]
+
+      // Checar apenas algumas partículas próximas para performance
+      for (let j = i + 1; j < Math.min(i + 50, particlesCount); j++) {
+        const x2 = positions[j * 3]
+        const y2 = positions[j * 3 + 1]
+        const z2 = positions[j * 3 + 2]
+
+        if (x2 === undefined || y2 === undefined || z2 === undefined) return
+        if (x1 === undefined || y1 === undefined || z1 === undefined) return
+
+        const dx = x2 - x1
+        const dy = y2 - y1
+        const dz = z2 - z1
+        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
+
+        if (distance < CONFIG.connections.maxDistance) {
+          linePositions.push(x1, y1, z1, x2, y2, z2)
+        }
+      }
+    }
+
+    linesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3))
+  }
 
   function animate() {
     animationId = requestAnimationFrame(animate)
+
+    // Rotação suave
     particlesMesh.rotation.y += CONFIG.particles.rotationSpeed
+
+    // Atualizar conexões
+    updateConnections()
+
     renderer.render(scene, camera)
   }
 
@@ -80,6 +141,12 @@ onUnmounted(() => {
   }
   if (renderer) {
     renderer.dispose()
+  }
+  if (particlesGeometry) {
+    particlesGeometry.dispose()
+  }
+  if (linesGeometry) {
+    linesGeometry.dispose()
   }
 })
 </script>

@@ -4,7 +4,7 @@
     <p class="section-subtitle">Elite dos melhores jogadores do servidor brasileiro</p>
 
     <div class="carousel-container">
-      <button class="carousel-view-3d" id="view3dBtn">
+      <button class="carousel-view-3d" id="view3dBtn" @click="showModal({ title: '3D View' })">
         <Box :size="24" color="#000" /> 3D View
       </button>
 
@@ -63,6 +63,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { Box } from 'lucide-vue-next'
+
+import { useModal } from '@/composables/useModal'
+const { showModal } = useModal()
 
 // Refs para elementos do DOM
 const carouselTrack = ref<HTMLElement | null>(null)
