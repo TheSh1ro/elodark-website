@@ -10,76 +10,71 @@
           <a href="#testimonials" @click.prevent="scrollToSection('#testimonials')">Reviews</a>
         </li>
       </ul>
-      <button class="nav-cta" @click="$emit('open-login')">ENTRAR</button>
+      <button class="nav-cta" @click="emit('open-login')">ENTRAR</button>
     </nav>
   </header>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const isVisible = ref(true)
-    let lastScrollY = 0
-    const scrollThreshold = 100 // Pixels de scroll antes de ativar
+const emit = defineEmits<{
+  'open-login': []
+}>()
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
+const isVisible = ref(true)
+let lastScrollY = 0
+const scrollThreshold = 100 // Pixels de scroll antes de ativar
 
-      // Se está no topo, sempre mostra
-      if (currentScrollY < scrollThreshold) {
-        isVisible.value = true
-        lastScrollY = currentScrollY
-        return
-      }
+const handleScroll = () => {
+  const currentScrollY = window.scrollY
 
-      // Scrollando para baixo - esconde
-      if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
-        isVisible.value = false
-      }
-      // Scrollando para cima - mostra
-      else if (currentScrollY < lastScrollY) {
-        isVisible.value = true
-      }
+  // Se está no topo, sempre mostra
+  if (currentScrollY < scrollThreshold) {
+    isVisible.value = true
+    lastScrollY = currentScrollY
+    return
+  }
 
-      lastScrollY = currentScrollY
-    }
+  // Scrollando para baixo - esconde
+  if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+    isVisible.value = false
+  }
+  // Scrollando para cima - mostra
+  else if (currentScrollY < lastScrollY) {
+    isVisible.value = true
+  }
 
-    onMounted(() => {
-      window.addEventListener('scroll', handleScroll, { passive: true })
-    })
+  lastScrollY = currentScrollY
+}
 
-    onUnmounted(() => {
-      window.removeEventListener('scroll', handleScroll)
-    })
-
-    const scrollToSection = (selector: string) => {
-      const element = document.querySelector(selector)
-      if (element) {
-        const elementPosition = element.getBoundingClientRect().top + window.scrollY
-        const currentPosition = window.scrollY
-
-        // Se estiver scrollando para baixo, adiciona offset de 8rem
-        if (elementPosition > currentPosition) {
-          const offset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4
-          window.scrollTo({
-            top: elementPosition + offset,
-            behavior: 'smooth',
-          })
-        } else {
-          // Se for para cima, scroll normal
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
-      }
-    }
-
-    return {
-      isVisible,
-      scrollToSection,
-    }
-  },
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
 })
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+const scrollToSection = (selector: string) => {
+  const element = document.querySelector(selector)
+  if (element) {
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY
+    const currentPosition = window.scrollY
+
+    // Se estiver scrollando para baixo, adiciona offset de 4rem
+    if (elementPosition > currentPosition) {
+      const offset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4
+      window.scrollTo({
+        top: elementPosition + offset,
+        behavior: 'smooth',
+      })
+    } else {
+      // Se for para cima, scroll normal
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+}
 </script>
 
 <style scoped>
