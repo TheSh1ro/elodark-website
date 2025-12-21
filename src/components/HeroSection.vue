@@ -10,8 +10,12 @@
       </h1>
       <p class="hero-subtitle">Boosters qualificados // Personalização // Resultado Garantido</p>
       <div class="hero-buttons">
-        <button class="btn-3d btn-primary-3d" onclick="scrollTo('#packages')">CONTRATAR</button>
-        <button class="btn-3d btn-secondary-3d" onclick="scrollTo('#services')">SABER MAIS</button>
+        <button class="btn-3d btn-primary-3d" @click="scrollToSection('#services')">
+          CONTRATAR
+        </button>
+        <button class="btn-3d btn-secondary-3d" @click="scrollToSection('#about')">
+          SABER MAIS
+        </button>
       </div>
     </div>
   </section>
@@ -36,7 +40,27 @@
     </div>
   </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const scrollToSection = (selector: string) => {
+  const element = document.querySelector(selector)
+  if (element) {
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY
+    const currentPosition = window.scrollY
+
+    // Se estiver scrollando para baixo, adiciona offset de 4rem
+    if (elementPosition > currentPosition) {
+      const offset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4
+      window.scrollTo({
+        top: elementPosition + offset,
+        behavior: 'smooth',
+      })
+    } else {
+      // Se for para cima, scroll normal
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+}
+</script>
 <style scoped>
 /* Hero Section */
 .hero {
