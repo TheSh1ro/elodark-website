@@ -9,7 +9,7 @@ import LoginPanel from './components/LoginPanel.vue'
 const isLoginOpen = ref(false)
 
 const handleMouseMove = (e: MouseEvent) => {
-  if (Math.random() > 0.5) {
+  if (Math.random() > 0.85) {
     const particle = document.createElement('div')
     particle.className = 'particle'
     particle.style.left = e.clientX + 'px'

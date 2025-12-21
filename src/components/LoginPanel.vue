@@ -263,7 +263,7 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   max-width: 480px;
-  background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+  background-color: rgba(0, 0, 0, 0.6);
   border-left: 2px solid rgba(76, 186, 157, 0.3);
   box-shadow:
     -20px 0 60px rgba(0, 0, 0, 0.8),
@@ -698,7 +698,7 @@ onBeforeUnmount(() => {
   }
 
   .panel-header {
-    margin-top: 2rem;
+    margin-top: 0rem;
   }
 
   .panel-title {

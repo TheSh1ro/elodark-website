@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header :class="{ 'header-hidden': !isVisible }">
     <nav>
       <div class="logo">ELODARK</div>
       <ul class="nav-menu">
@@ -14,20 +14,74 @@
     </nav>
   </header>
 </template>
+
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
 
 export default defineComponent({
-  methods: {
-    scrollToSection(selector: string) {
+  setup() {
+    const isVisible = ref(true)
+    let lastScrollY = 0
+    const scrollThreshold = 100 // Pixels de scroll antes de ativar
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      // Se está no topo, sempre mostra
+      if (currentScrollY < scrollThreshold) {
+        isVisible.value = true
+        lastScrollY = currentScrollY
+        return
+      }
+
+      // Scrollando para baixo - esconde
+      if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+        isVisible.value = false
+      }
+      // Scrollando para cima - mostra
+      else if (currentScrollY < lastScrollY) {
+        isVisible.value = true
+      }
+
+      lastScrollY = currentScrollY
+    }
+
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll, { passive: true })
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll)
+    })
+
+    const scrollToSection = (selector: string) => {
       const element = document.querySelector(selector)
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY
+        const currentPosition = window.scrollY
+
+        // Se estiver scrollando para baixo, adiciona offset de 8rem
+        if (elementPosition > currentPosition) {
+          const offset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4
+          window.scrollTo({
+            top: elementPosition + offset,
+            behavior: 'smooth',
+          })
+        } else {
+          // Se for para cima, scroll normal
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
       }
-    },
+    }
+
+    return {
+      isVisible,
+      scrollToSection,
+    }
   },
 })
 </script>
+
 <style scoped>
 header {
   position: fixed;
@@ -38,6 +92,13 @@ header {
   backdrop-filter: blur(20px);
   border-bottom: 2px solid transparent;
   border-image: linear-gradient(90deg, transparent, var(--primary), transparent) 1;
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(0);
+}
+
+/* Classe para esconder o header */
+header.header-hidden {
+  transform: translateY(-100%);
 }
 
 nav {
@@ -97,6 +158,10 @@ nav {
   text-transform: uppercase;
   position: relative;
   transition: all 0.3s;
+  cursor:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="%23ff8c00" opacity="0.3"/><circle cx="12" cy="12" r="3" fill="%23ffb347"/></svg>')
+      12 12,
+    auto;
 }
 
 .nav-menu a::before {
