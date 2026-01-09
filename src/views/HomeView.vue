@@ -10,11 +10,11 @@
 </template>
 <script lang="ts">
 import ThreeBackground from '@/components/ThreeBackground.vue'
-import AboutComponent from '@/components/AboutComponent.vue'
-import CarersCarousel from '@/components/CarersCarousel.vue'
-import HeroSection from '@/components/HeroSection.vue'
-import ServicesComponent from '@/components/ServicesComponent.vue'
-import TestimonialsComponent from '@/components/TestimonialsComponent.vue'
+import AboutComponent from '@/components/home/AboutComponent.vue'
+import CarersCarousel from '@/components/home/CarersCarousel.vue'
+import HeroSection from '@/components/home/HeroSection.vue'
+import ServicesComponent from '@/components/home/ServicesComponent.vue'
+import TestimonialsComponent from '@/components/home/TestimonialsComponent.vue'
 export default {
   components: {
     AboutComponent,

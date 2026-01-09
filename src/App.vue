@@ -17,7 +17,7 @@ import { onMounted, onBeforeUnmount, ref } from 'vue'
 import PageHeader from './components/PageHeader.vue'
 import PageFooter from './components/PageFooter.vue'
 // import AudioPlayer from './components/AudioPlayer.vue'
-import LoginPanel from './components/LoginPanel.vue'
+import LoginPanel from './components/home/LoginPanel.vue'
 
 import ModalNotification from '@/components/ModalNotification.vue'
 import { useModal } from '@/composables/useModal'
