@@ -5,7 +5,7 @@
   <div class="elojob-page">
     <div class="elojob-container">
       <div class="elojob-left">
-        <ElojobCalculator @update="updateData" />
+        <ElojobCalculator :max-elo="6" @update="updateData" />
         <ElojobProcess />
         <ElojobFAQ />
       </div>
@@ -59,24 +59,30 @@ const updateData = (data: any) => {
 .elojob-page {
   min-height: 100vh;
   padding: 8rem 3rem 3rem;
-  background: var(--darker);
 }
 
 .elojob-container {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 3rem;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 2.5rem;
   align-items: start;
 }
 
-.elojob-right {
-  height: 100vh;
-  position: sticky;
-  top: 4rem;
+.elojob-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
 
+.elojob-right {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+}
+
+/* Tablets e dispositivos menores */
 @media (max-width: 1024px) {
   .elojob-container {
     grid-template-columns: 1fr;
@@ -84,12 +90,26 @@ const updateData = (data: any) => {
 
   .elojob-right {
     position: static;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
   }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
   .elojob-page {
     padding: 6rem 2rem 2rem;
+  }
+
+  .elojob-container {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .elojob-page {
+    padding: 5rem 1rem 2rem;
   }
 }
 </style>

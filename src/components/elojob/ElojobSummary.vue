@@ -3,25 +3,20 @@
     <h3 class="summary-title">Resumo do Pedido</h3>
 
     <div class="summary-details">
-      <div class="summary-item">
-        <span class="summary-label">De:</span>
-        <span class="summary-value">{{ currentElo }}</span>
-      </div>
-      <div class="summary-item">
-        <span class="summary-label">Para:</span>
-        <span class="summary-value">{{ targetElo }}</span>
-      </div>
       <div class="summary-divider"></div>
+
       <div class="summary-item">
         <span class="summary-label">Divisões</span>
         <span class="summary-value">{{ divisions }}</span>
       </div>
+
       <div class="summary-item">
         <span class="summary-label">Tempo Estimado</span>
         <span class="summary-value">{{ estimatedTime }}</span>
       </div>
+
       <div class="summary-item">
-        <span class="summary-label">Estimativa de inicio</span>
+        <span class="summary-label">Estimativa de início</span>
         <span class="summary-value">24h</span>
       </div>
     </div>
@@ -33,7 +28,10 @@
       </div>
     </div>
 
-    <button class="btn-primary">CONTRATAR AGORA</button>
+    <button class="btn-primary">
+      <span>CONTRATAR AGORA</span>
+      <span class="btn-icon">→</span>
+    </button>
   </div>
 </template>
 
@@ -49,71 +47,131 @@ defineProps<{
 
 <style scoped>
 .summary-card {
-  background: var(--dark);
-  border: 2px solid var(--primary);
+  border: 1px solid rgba(76, 186, 157, 0.3);
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 0 30px rgba(76, 186, 157, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .summary-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--primary);
   text-transform: uppercase;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
   text-align: center;
+  letter-spacing: 2px;
 }
 
 .summary-details {
   display: flex;
   flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+}
+
+.summary-row.highlight {
+  background: rgba(76, 186, 157, 0.05);
+  border: 1px solid rgba(76, 186, 157, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.arrow {
+  font-size: 1.5rem;
+  color: var(--secondary);
+  font-weight: 700;
 }
 
 .summary-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+}
+
+.summary-row .summary-item {
   align-items: center;
+}
+
+.summary-row:not(.highlight) .summary-item {
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .summary-label {
   font-family: 'Rajdhani', sans-serif;
   font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .summary-value {
   font-family: 'Orbitron', sans-serif;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--secondary);
 }
 
+.summary-row.highlight .summary-value {
+  font-size: 1.2rem;
+}
+
+.elo-from {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.elo-to {
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--primary);
+}
+
 .summary-divider {
   height: 1px;
-  background: rgba(76, 186, 157, 0.2);
-  margin: 0.5rem 0;
+  background: linear-gradient(90deg, transparent, rgba(76, 186, 157, 0.3), transparent);
+  margin: 0.3rem 0;
 }
 
 .price-display {
-  background: rgba(76, 186, 157, 0.05);
+  background: rgba(76, 186, 157, 0.08);
   border: 2px solid var(--primary);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 0.8rem;
   text-align: center;
   margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.price-label {
-  display: block;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
+.price-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(76, 186, 157, 0.1), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  50%,
+  100% {
+    left: 100%;
+  }
 }
 
 .price-amount {
@@ -125,18 +183,19 @@ defineProps<{
 
 .currency {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: var(--secondary);
   font-weight: 700;
 }
 
 .price {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 900;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1;
 }
 
 .btn-primary {
@@ -151,12 +210,70 @@ defineProps<{
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
 }
 
 .btn-primary:hover {
   box-shadow: 0 0 30px var(--primary);
   transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.btn-primary:hover .btn-icon {
+  transform: translateX(5px);
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .summary-card {
+    padding: 1.5rem;
+  }
+
+  .summary-title {
+    font-size: 1.2rem;
+  }
+
+  .price {
+    font-size: 2.3rem;
+  }
+
+  .summary-row.highlight {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .arrow {
+    transform: rotate(90deg);
+  }
 }
 </style>

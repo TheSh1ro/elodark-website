@@ -4,6 +4,107 @@ Guia completo de padrões de estilo, cores e variáveis CSS para desenvolvimento
 
 ---
 
+## 📁 Estrutura do Projeto
+
+### Visão Geral
+
+```
+ej-website/
+├── public/                    # Arquivos estáticos públicos
+│   └── audio/                 # Áudio background e effects
+├── src/
+│   ├── App.vue               # Componente raiz (CSS vars, particles)
+│   ├── main.ts               # Entry point da aplicação
+│   ├── assets/
+│   │   └── global.css         # Estilos globais compartilhados
+│   ├── components/            # Componentes reutilizáveis
+│   │   ├── AudioPlayer.vue
+│   │   ├── ModalNotification.vue
+│   │   ├── PageHeader.vue     # Header sticky com navegação
+│   │   ├── PageFooter.vue
+│   │   ├── ThreeBackground.vue # Canvas 3D background
+│   │   ├── elojob/           # Seção ElojobView
+│   │   │   ├── ElojobCalculator.vue
+│   │   │   ├── ElojobFaq.vue
+│   │   │   ├── ElojobHero.vue
+│   │   │   ├── ElojobProcess.vue
+│   │   │   └── ElojobSummary.vue
+│   │   └── home/             # Seção HomeView
+│   │       ├── AboutCard.vue
+│   │       ├── AboutComponent.vue
+│   │       ├── CarersCarousel.vue  # Carousel com drag/autoplay
+│   │       ├── HeroSection.vue
+│   │       ├── LoginPanel.vue
+│   │       ├── ServiceCard.vue
+│   │       ├── ServicesComponent.vue
+│   │       ├── TestimonialCard.vue
+│   │       └── TestimonialsComponent.vue
+│   ├── composables/           # Lógica reutilizável
+│   │   ├── useModal.ts       # Gerenciamento de modais
+│   │   └── useScrollAnimation.ts # Animações ao scroll
+│   ├── router/
+│   │   └── index.ts           # Configuração de rotas
+│   ├── stores/
+│   │   └── counter.ts         # Pinia store (state management)
+│   └── views/
+│       ├── HomeView.vue       # Página inicial (hero, carousel, about, packages, testimonials)
+│       └── ElojobView.vue     # Página de cálculator e informações
+├── index.html
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── eslint.config.ts
+└── README.md
+```
+
+### Hierarquia de Componentes
+
+```
+App.vue (root - CSS vars, particle effects, Scanline)
+├── ThreeBackground.vue (Canvas 3D)
+├── PageHeader (sticky)
+│   └── Navigation + Logo
+├── RouterView
+│   ├── HomeView
+│   │   ├── HeroSection (hero + stats bar)
+│   │   ├── CarersCarousel (carousel de boosters)
+│   │   ├── AboutComponent
+│   │   ├── ServicesComponent (grid de serviços)
+│   │   └── TestimonialsComponent (depoimentos)
+│   └── ElojobView
+│       ├── ElojobHero
+│       ├── ElojobCalculator
+│       ├── ElojobProcess
+│       ├── ElojobFaq
+│       └── ElojobSummary
+└── PageFooter (sticky)
+```
+
+### Propósito de Cada Pasta
+
+| Pasta                    | Propósito                                 |
+| ------------------------ | ----------------------------------------- |
+| `public/`                | Assets estáticos (audio, imagens, ícones) |
+| `src/`                   | Código-fonte da aplicação                 |
+| `src/components/`        | Componentes Vue reutilizáveis             |
+| `src/components/home/`   | Componentes específicos da HomeView       |
+| `src/components/elojob/` | Componentes específicos da ElojobView     |
+| `src/composables/`       | Lógica compartilhada (hooks Vue 3)        |
+| `src/router/`            | Configuração de navegação                 |
+| `src/stores/`            | Gerenciamento de estado (Pinia)           |
+| `src/views/`             | Páginas/telas da aplicação                |
+| `src/assets/`            | Estilos globais e assets importados       |
+
+### Arquivos de Configuração
+
+- **tsconfig.json**: Configuração TypeScript (Node 20+, strict mode)
+- **vite.config.ts**: Build tool (alias `@`, plugins Vue + DevTools)
+- **eslint.config.ts** + **.prettierrc**: Formatação automática
+- **index.html**: Entrada HTML (renderiza `<div id="app">`)
+- **env.d.ts**: Type definitions para Vite
+
+---
+
 ## 🎨 Sistema de Cores
 
 ### Variáveis CSS

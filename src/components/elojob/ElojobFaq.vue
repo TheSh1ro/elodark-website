@@ -35,13 +35,13 @@ const faqs = [
     id: 1,
     question: 'É seguro contratar um serviço de elojob?',
     answer:
-      'Sim! Utilizamos VPN exclusiva, não alteramos configurações da sua conta e garantimos total sigilo. Trabalhamos há anos no mercado com zero casos de banimento.',
+      'Sim! Utilizamos meios seguros, não alteramos configurações da sua conta e garantimos total sigilo. Trabalhamos há anos no mercado de elojob com zero casos de banimento.',
   },
   {
     id: 2,
     question: 'Quanto tempo leva para completar o boost?',
     answer:
-      'O tempo varia conforme o elo inicial e final. Em média, cada divisão leva de 2 a 5 dias. Você acompanha o progresso em tempo real através do nosso painel.',
+      'O tempo varia conforme o elo inicial e final. Em média, cada divisão leva de 1 a 2 dias. Você acompanha o progresso em tempo real através dos nossos boosters.',
   },
   {
     id: 3,
@@ -53,7 +53,7 @@ const faqs = [
     id: 4,
     question: 'Quem são os boosters?',
     answer:
-      'Todos nossos boosters são jogadores Diamante+ com histórico verificado e alta taxa de vitória. Cada profissional passa por rigoroso processo de seleção.',
+      'Todos nossos boosters são jogadores Mestre+ com histórico verificado e alta taxa de vitória. Cada profissional passa por um processo de seleção, garantindo que sejam bons e confiáveis.',
   },
   {
     id: 5,
@@ -65,19 +65,7 @@ const faqs = [
     id: 6,
     question: 'Quais formas de pagamento vocês aceitam?',
     answer:
-      'Aceitamos PIX (confirmação instantânea), cartão de crédito/débito, transferência bancária e carteiras digitais. Todas as transações são protegidas e criptografadas.',
-  },
-  {
-    id: 7,
-    question: 'Posso pausar o serviço?',
-    answer:
-      'Sim! Você pode pausar o boost a qualquer momento através do painel. O serviço será retomado quando você solicitar, sem custos adicionais.',
-  },
-  {
-    id: 8,
-    question: 'Vocês trabalham com quais jogos?',
-    answer:
-      'Oferecemos elojob para League of Legends, Valorant, CS2, TFT e Wild Rift. Consulte nossa equipe para outros títulos.',
+      'Aceitamos PIX (confirmação instantânea) e cartão de crédito/débito. Todas as transações são protegidas e você pode entrar em contato com a nossa equipe caso surja alguma dúvida.',
   },
 ]
 
@@ -89,12 +77,6 @@ const toggleFaq = (id: number) => {
 <style scoped>
 .elojob-faq {
   padding: 6rem 3rem;
-  background: linear-gradient(
-    180deg,
-    var(--darker) 0%,
-    rgba(76, 186, 157, 0.03) 50%,
-    var(--darker) 100%
-  );
 }
 
 .faq-container {

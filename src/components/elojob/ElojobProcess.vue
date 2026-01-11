@@ -26,20 +26,22 @@
 <script setup lang="ts">
 const processSteps = [
   {
-    title: 'Configure seu Boost',
-    description: 'Use nossa calculadora para escolher elo inicial, final e extras desejados.',
+    title: 'Contrate seu Boost',
+    description: 'Use nossa plataforma para informar o elo inicial, final e extras desejados.',
   },
   {
     title: 'Realize o Pagamento',
-    description: 'Pagamento seguro via PIX, cartão ou transferência. Confirmação instantânea.',
+    description: 'Pagamento seguro via PIX ou cartão. Confirmação instantânea.',
   },
   {
-    title: 'Envie suas Credenciais',
-    description: 'Compartilhe os dados de login de forma segura pelo nosso painel criptografado.',
+    title: 'Envie suas informações',
+    description:
+      'Compartilhe os dados de login de forma segura pelo nosso chat após a confirmação do pagamento.',
   },
   {
     title: 'Acompanhe o Progresso',
-    description: 'Monitore cada partida em tempo real. Receba notificações a cada vitória.',
+    description:
+      'Informaremos sobre o progresso do serviço de acordo com o meio de comunicação combinado.',
   },
   {
     title: 'Receba sua Conta',
@@ -51,7 +53,6 @@ const processSteps = [
 <style scoped>
 .elojob-process {
   padding: 4rem 3rem;
-  background: var(--darker);
 }
 
 .process-container {
