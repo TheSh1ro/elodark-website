@@ -137,21 +137,21 @@ import { ref, computed, watch } from 'vue'
 
 const emit = defineEmits(['update'])
 
-// Props
 const props = withDefaults(
   defineProps<{
-    maxElo?: number // 0-7, default 7 (Grão-Mestre)
+    maxElo?: number // 0-8, default 8 (Grão-Mestre)
   }>(),
   {
-    maxElo: 7,
+    maxElo: 8,
   },
 )
 
+// Estado
 const currentElo = ref(2)
-const currentDivision = ref(2)
+const currentDivision = ref(2) // 0=I, 1=II, 2=III, 3=IV
 const showCurrentDivisions = ref(false)
 
-const targetElo = ref(5)
+const targetElo = ref(6)
 const targetDivision = ref(0)
 const showTargetDivisions = ref(false)
 
@@ -164,27 +164,24 @@ const options = ref({
   specificChampions: false,
 })
 
+// Configuração dos Elos
 const allElos = [
   { value: 0, label: 'Ferro', symbol: '🛡️', basePrice: 50, hasLeagues: true },
   { value: 1, label: 'Bronze', symbol: '🥉', basePrice: 60, hasLeagues: true },
   { value: 2, label: 'Prata', symbol: '🥈', basePrice: 80, hasLeagues: true },
   { value: 3, label: 'Ouro', symbol: '🥇', basePrice: 120, hasLeagues: true },
   { value: 4, label: 'Platina', symbol: '💎', basePrice: 180, hasLeagues: true },
-  { value: 5, label: 'Diamante', symbol: '💠', basePrice: 280, hasLeagues: true },
-  { value: 6, label: 'Mestre', symbol: '👑', basePrice: 450, hasLeagues: false },
-  { value: 7, label: 'Grão-Mestre', symbol: '⭐', basePrice: 700, hasLeagues: false },
+  { value: 5, label: 'Esmeralda', symbol: '💚', basePrice: 230, hasLeagues: true },
+  { value: 6, label: 'Diamante', symbol: '💠', basePrice: 280, hasLeagues: true },
+  { value: 7, label: 'Mestre', symbol: '👑', basePrice: 450, hasLeagues: false },
+  { value: 8, label: 'Grão-Mestre', symbol: '⭐', basePrice: 700, hasLeagues: false },
 ]
 
-// Elos disponíveis para seleção no lado esquerdo (Current) - exclui o último
-const currentElos = computed(() => {
-  return allElos.filter((elo) => elo.value < props.maxElo)
-})
+// Elos disponíveis
+const currentElos = computed(() => allElos.filter((elo) => elo.value < props.maxElo))
+const targetElos = computed(() => allElos.filter((elo) => elo.value <= props.maxElo))
 
-// Elos disponíveis para seleção no lado direito (Target) - inclui o último
-const targetElos = computed(() => {
-  return allElos.filter((elo) => elo.value <= props.maxElo)
-})
-
+// Labels dos elos com divisão
 const getCurrentEloLabel = (elo: any, index: number) => {
   if (currentElo.value === index && !showCurrentDivisions.value && elo.hasLeagues) {
     const divisions = ['I', 'II', 'III', 'IV']
@@ -201,23 +198,38 @@ const getTargetEloLabel = (elo: any, index: number) => {
   return elo.label
 }
 
+// Função auxiliar: calcula o "valor numérico" de um elo+divisão para comparação
+// Quanto menor o número, mais alto o elo (I=0 é mais alto que IV=3)
+const getEloValue = (elo: number, division: number) => {
+  const eloData = allElos[elo]
+  if (!eloData.hasLeagues) {
+    return elo * 10 // Sem divisões, apenas multiplica
+  }
+  return elo * 10 + (3 - division) // I=3, II=2, III=1, IV=0 (invertido para ordem crescente)
+}
+
+// Validações
 const isEloDisabled = (index: number) => {
-  if (index < currentElo.value) return true
-  if (index === currentElo.value && !allElos[index].hasLeagues) return true
-  // Se o elo atual tem ligas e está na divisão I (índice 0), não pode selecionar o mesmo elo como alvo
-  if (index === currentElo.value && allElos[index].hasLeagues && currentDivision.value === 0)
-    return true
   if (index > props.maxElo) return true
-  return false
+
+  const currentValue = getEloValue(currentElo.value, currentDivision.value)
+  const targetValue = getEloValue(index, 0) // Assume a melhor divisão possível (I)
+
+  // Desabilita se o elo alvo for menor ou igual ao atual
+  return targetValue <= currentValue
 }
 
 const isDivisionDisabled = (divIndex: number) => {
   if (targetElo.value !== currentElo.value) return false
+
+  // Se está no mesmo elo, só permite divisões menores (numericamente maiores)
   return divIndex >= currentDivision.value
 }
 
+// Seleção de Elo Atual
 const selectCurrentElo = (index: number) => {
   if (allElos[index].hasLeagues) {
+    // Toggle divisões
     if (currentElo.value === index && showCurrentDivisions.value) {
       showCurrentDivisions.value = false
     } else {
@@ -226,13 +238,13 @@ const selectCurrentElo = (index: number) => {
       showTargetDivisions.value = false
     }
   } else {
+    // Elo sem divisões
     currentElo.value = index
     showCurrentDivisions.value = false
     showTargetDivisions.value = false
 
-    if (targetElo.value <= index) {
-      targetElo.value = index + 1 <= props.maxElo ? index + 1 : index
-    }
+    // Ajusta o target se necessário
+    adjustTargetAfterCurrentChange()
     emitUpdate()
   }
 }
@@ -241,26 +253,36 @@ const selectCurrentDivision = (divIndex: number) => {
   currentDivision.value = divIndex
   showCurrentDivisions.value = false
 
-  // Se selecionou divisão I (índice 0) e o elo alvo é o mesmo, muda para o próximo elo
-  if (divIndex === 0 && targetElo.value === currentElo.value) {
-    targetElo.value =
-      currentElo.value + 1 <= props.maxElo ? currentElo.value + 1 : currentElo.value + 1
-    targetDivision.value = 3 // IV do próximo elo
-  } else if (
-    targetElo.value < currentElo.value ||
-    (targetElo.value === currentElo.value && targetDivision.value >= divIndex)
-  ) {
-    targetElo.value = currentElo.value
-    targetDivision.value = divIndex > 0 ? divIndex - 1 : divIndex
-  }
-
+  // Ajusta o target se necessário
+  adjustTargetAfterCurrentChange()
   emitUpdate()
 }
 
+// Ajusta o target quando o current muda
+const adjustTargetAfterCurrentChange = () => {
+  const currentValue = getEloValue(currentElo.value, currentDivision.value)
+  const targetValue = getEloValue(targetElo.value, targetDivision.value)
+
+  if (targetValue <= currentValue) {
+    // Target inválido, precisa ajustar
+    if (currentDivision.value > 0) {
+      // Pode ir para a próxima divisão do mesmo elo
+      targetElo.value = currentElo.value
+      targetDivision.value = currentDivision.value - 1
+    } else if (currentElo.value + 1 <= props.maxElo) {
+      // Vai para o próximo elo
+      targetElo.value = currentElo.value + 1
+      targetDivision.value = allElos[currentElo.value + 1].hasLeagues ? 3 : 0
+    }
+  }
+}
+
+// Seleção de Elo Alvo
 const selectTargetElo = (index: number) => {
   if (isEloDisabled(index)) return
 
   if (allElos[index].hasLeagues) {
+    // Toggle divisões
     if (targetElo.value === index && showTargetDivisions.value) {
       showTargetDivisions.value = false
     } else {
@@ -268,11 +290,15 @@ const selectTargetElo = (index: number) => {
       showTargetDivisions.value = true
       showCurrentDivisions.value = false
 
-      if (index === currentElo.value && currentDivision.value === 0) {
-        targetDivision.value = 0
+      // Se é o mesmo elo, ajusta a divisão se necessário
+      if (index === currentElo.value) {
+        if (targetDivision.value >= currentDivision.value) {
+          targetDivision.value = Math.max(0, currentDivision.value - 1)
+        }
       }
     }
   } else {
+    // Elo sem divisões
     targetElo.value = index
     showTargetDivisions.value = false
     showCurrentDivisions.value = false
@@ -288,22 +314,37 @@ const selectTargetDivision = (divIndex: number) => {
   emitUpdate()
 }
 
+// Cálculo de divisões
 const divisions = computed(() => {
   let count = 0
 
+  // Mesmo elo
   if (currentElo.value === targetElo.value) {
-    count = currentDivision.value - targetDivision.value
-  } else {
-    for (let i = currentElo.value; i <= targetElo.value; i++) {
-      if (allElos[i].hasLeagues) {
-        if (i === currentElo.value) {
-          count += currentDivision.value + 1
-        } else if (i === targetElo.value) {
-          count += 4 - targetDivision.value
-        } else {
-          count += 4
-        }
-      } else if (i < targetElo.value) {
+    return currentDivision.value - targetDivision.value
+  }
+
+  // Elos diferentes
+  for (let i = currentElo.value; i <= targetElo.value; i++) {
+    const eloData = allElos[i]
+
+    if (i === currentElo.value) {
+      // Primeiro elo: conta da divisão atual até o topo
+      if (eloData.hasLeagues) {
+        count += currentDivision.value + 1 // +1 porque inclui a divisão atual
+      } else {
+        count += 1
+      }
+    } else if (i === targetElo.value) {
+      // Último elo: conta do fundo até a divisão alvo
+      if (eloData.hasLeagues) {
+        count += 4 - targetDivision.value
+      }
+      // Se não tem leagues, já foi contado no elo anterior
+    } else {
+      // Elos intermediários: conta todas as 4 divisões
+      if (eloData.hasLeagues) {
+        count += 4
+      } else {
         count += 1
       }
     }
@@ -312,28 +353,49 @@ const divisions = computed(() => {
   return count
 })
 
+// Cálculo de preço base
 const basePrice = computed(() => {
   let total = 0
 
+  if (currentElo.value === targetElo.value) {
+    // Mesmo elo: preço * número de divisões
+    const divCount = currentDivision.value - targetDivision.value
+    return allElos[currentElo.value].basePrice * divCount
+  }
+
+  // Elos diferentes
   for (let i = currentElo.value; i <= targetElo.value; i++) {
-    if (allElos[i].hasLeagues) {
-      if (i === currentElo.value && i === targetElo.value) {
-        total += allElos[i].basePrice * (currentDivision.value - targetDivision.value)
-      } else if (i === currentElo.value) {
-        total += allElos[i].basePrice * (currentDivision.value + 1)
-      } else if (i === targetElo.value) {
-        total += allElos[i].basePrice * (4 - targetDivision.value)
+    const eloData = allElos[i]
+
+    if (i === currentElo.value) {
+      // Primeiro elo: conta da divisão atual até o topo
+      if (eloData.hasLeagues) {
+        total += eloData.basePrice * (currentDivision.value + 1)
       } else {
-        total += allElos[i].basePrice * 4
+        total += eloData.basePrice
       }
-    } else if (i < targetElo.value) {
-      total += allElos[i].basePrice
+    } else if (i === targetElo.value) {
+      // Último elo: conta do fundo até a divisão alvo
+      if (eloData.hasLeagues) {
+        total += eloData.basePrice * (4 - targetDivision.value)
+      } else {
+        // Elo sem divisões (Mestre, Grão-Mestre) - AGORA CONTA!
+        total += eloData.basePrice
+      }
+    } else {
+      // Elos intermediários: conta tudo
+      if (eloData.hasLeagues) {
+        total += eloData.basePrice * 4
+      } else {
+        total += eloData.basePrice
+      }
     }
   }
 
   return total
 })
 
+// Preço final com modificadores
 const finalPrice = computed(() => {
   let price = basePrice.value
   if (options.value.express) price *= 1.3
@@ -342,12 +404,14 @@ const finalPrice = computed(() => {
   return Math.round(price)
 })
 
+// Tempo estimado
 const estimatedTime = computed(() => {
   let days = divisions.value * 2
   if (options.value.express) days = Math.ceil(days * 0.6)
   return `${days}-${days + 3} dias`
 })
 
+// Emite atualização
 const emitUpdate = () => {
   const divisionLabels = ['I', 'II', 'III', 'IV']
 
@@ -368,7 +432,11 @@ const emitUpdate = () => {
   })
 }
 
-watch([currentElo, targetElo, currentDivision, targetDivision], emitUpdate, { immediate: true })
+// Watch para mudanças
+watch([currentElo, targetElo, currentDivision, targetDivision, options], emitUpdate, {
+  immediate: true,
+  deep: true,
+})
 </script>
 
 <style scoped>

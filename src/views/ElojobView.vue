@@ -5,7 +5,7 @@
   <div class="elojob-page">
     <div class="elojob-container">
       <div class="elojob-left">
-        <ElojobCalculator :max-elo="6" @update="updateData" />
+        <ElojobCalculator :max-elo="7" @update="updateData" />
         <ElojobProcess />
         <ElojobFAQ />
       </div>
