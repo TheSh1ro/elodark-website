@@ -24,7 +24,7 @@ const emit = defineEmits<{
 
 const isVisible = ref(true)
 let lastScrollY = 0
-const scrollThreshold = 100 // Pixels de scroll antes de ativar
+const scrollThreshold = 10 // Pixels de scroll antes de ativar
 
 const handleScroll = () => {
   const currentScrollY = window.scrollY
@@ -83,7 +83,7 @@ header {
   top: 0;
   width: 100%;
   z-index: 1000;
-  background: rgba(5, 8, 16, 0.8);
+  background: rgba(5, 8, 16, 0.4);
   backdrop-filter: blur(20px);
   border-bottom: 2px solid transparent;
   border-image: linear-gradient(90deg, transparent, var(--primary), transparent) 1;
@@ -99,7 +99,7 @@ header.header-hidden {
 nav {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 1.5rem 3rem;
+  padding: 1.2rem 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -88,6 +88,8 @@ onBeforeUnmount(cleanup)
 </script>
 
 <style>
+@import '@/assets/global.css';
+
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
 
 * {

@@ -208,23 +208,6 @@ onUnmounted(() => {
   border-top: none;
 }
 
-.scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(76, 186, 157, 0.03) 2px,
-    rgba(76, 186, 157, 0.03) 4px
-  );
-  pointer-events: none;
-  animation: scan 8s linear infinite;
-}
-
 @keyframes scan {
   0% {
     transform: translateY(0);

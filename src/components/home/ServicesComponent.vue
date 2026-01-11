@@ -28,7 +28,7 @@ const services = [
     name: 'EloJob',
     description: 'Boost completo sem sua participação',
     features: ['Menor preço', 'Entrega rápida', 'VPN + Proteção', 'Suporte 24/7'],
-    buttonText: 'COMPRAR AGORA',
+    buttonText: 'CONTRATAR ELOJOB',
   },
   {
     badge: null,
