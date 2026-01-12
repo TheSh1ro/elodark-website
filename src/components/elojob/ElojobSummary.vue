@@ -28,20 +28,29 @@
       </div>
     </div>
 
-    <button class="btn-primary">
+    <button class="btn-primary" :disabled="!isValid">
       <span>CONTRATAR AGORA</span>
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue'
+
+const props = defineProps<{
   currentElo: string
   targetElo: string
   divisions: number
   estimatedTime: string
   price: number
 }>()
+
+// Verifica se os campos foram preenchidos
+const isValid = computed(() => {
+  return (
+    props.currentElo !== '--' && props.targetElo !== '--' && props.divisions > 0 && props.price > 0
+  )
+})
 </script>
 
 <style scoped>
@@ -230,17 +239,23 @@ defineProps<{
   transition: left 0.5s;
 }
 
-.btn-primary:hover::before {
+.btn-primary:not(:disabled):hover::before {
   left: 100%;
 }
 
-.btn-primary:hover {
+.btn-primary:not(:disabled):hover {
   box-shadow: 0 0 30px var(--primary);
   transform: translateY(-2px);
 }
 
-.btn-primary:active {
+.btn-primary:not(:disabled):active {
   transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background: rgba(76, 186, 157, 0.3);
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .btn-icon {
@@ -248,7 +263,7 @@ defineProps<{
   transition: transform 0.3s;
 }
 
-.btn-primary:hover .btn-icon {
+.btn-primary:not(:disabled):hover .btn-icon {
   transform: translateX(5px);
 }
 

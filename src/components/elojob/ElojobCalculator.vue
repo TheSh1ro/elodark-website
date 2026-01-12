@@ -231,8 +231,11 @@ import emblemDiamond from '@/assets/emblems-rank/emblem-diamond.png'
 import emblemMaster from '@/assets/emblems-rank/emblem-master.png'
 import emblemGrandmaster from '@/assets/emblems-rank/emblem-grandmaster.png'
 
-const emit = defineEmits(['update'])
+import type { ServiceData } from '@/types/serviceData'
 
+const emit = defineEmits<{
+  update: [data: ServiceData]
+}>()
 const props = withDefaults(
   defineProps<{
     maxElo?: number

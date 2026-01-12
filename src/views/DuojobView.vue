@@ -31,18 +31,20 @@ import ElojobProcess from '@/components/elojob/ElojobProcess.vue'
 import ElojobFAQ from '@/components/elojob/ElojobFaq.vue'
 import ElojobSummary from '@/components/elojob/ElojobSummary.vue'
 
-const currentElo = ref('Prata')
-const targetElo = ref('Diamante')
-const divisions = ref(3)
-const estimatedTime = ref('6-9 dias')
-const price = ref(480)
+import type { ServiceData } from '@/types/serviceData'
 
-const updateData = (data: any) => {
-  currentElo.value = data.currentElo
-  targetElo.value = data.targetElo
-  divisions.value = data.divisions
-  estimatedTime.value = data.estimatedTime
-  price.value = data.price
+const currentElo = ref('--')
+const targetElo = ref('--')
+const divisions = ref(0)
+const estimatedTime = ref('--:--')
+const price = ref(0)
+
+const updateData = (data: ServiceData) => {
+  currentElo.value = data.currentElo ?? currentElo.value
+  targetElo.value = data.targetElo ?? targetElo.value
+  divisions.value = data.divisions ?? divisions.value
+  estimatedTime.value = data.estimatedTime ?? estimatedTime.value
+  price.value = data.price ?? price.value
 }
 </script>
 
