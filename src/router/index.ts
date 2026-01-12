@@ -10,9 +10,19 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/elojob',
+      path: '/services/elojob',
       name: 'elojob',
       component: () => import('@/views/ElojobView.vue'),
+    },
+    {
+      path: '/services/duojob',
+      name: 'duojob',
+      component: () => import('@/views/DuojobView.vue'),
+    },
+    {
+      path: '/services/wins',
+      name: 'vitorias',
+      component: () => import('@/views/VitoriasView.vue'),
     },
   ],
   scrollBehavior(to, from, savedPosition) {

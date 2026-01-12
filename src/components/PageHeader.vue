@@ -1,34 +1,43 @@
 <template>
-  <header :class="{ 'header-hidden': !isVisible, 'is-home': isHome }">
+  <header :class="headerClasses">
     <nav>
-      <img class="logo" @click="navigateToHome" :src="logo" />
-      <ul class="nav-menu">
+      <!-- Logo -->
+      <div class="nav-left">
+        <img class="logo" @click="navigateToHome" :src="logo" alt="Logo" />
+
+        <!-- Dropdown only visible on non-home pages -->
+        <div
+          v-if="!isHome"
+          class="dropdown"
+          @mouseenter="showDropdown = true"
+          @mouseleave="showDropdown = false"
+        >
+          <span class="dropdown-trigger">Serviços</span>
+          <ul v-show="showDropdown" class="dropdown-menu">
+            <li><RouterLink to="/services/elojob">Elojob</RouterLink></li>
+            <li><RouterLink to="/services/duojob">Duojob</RouterLink></li>
+            <li><RouterLink to="/services/wins">Vitórias</RouterLink></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Full menu only on home page -->
+      <ul v-if="isHome" class="nav-menu">
         <li>
-          <a v-if="isHome" href="#home" @click.prevent="scrollToSection('#home')">Início</a>
+          <a href="#home" @click.prevent="scrollToSection('#home')">Início</a>
         </li>
         <li>
-          <a v-if="isHome" href="#boosters" @click.prevent="scrollToSection('#boosters')">
-            Boosters
-          </a>
-          <RouterLink v-else to="/booster">Boosters</RouterLink>
+          <a href="#boosters" @click.prevent="scrollToSection('#boosters')">Boosters</a>
         </li>
         <li class="dropdown" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-          <a v-if="isHome" href="#services" @click.prevent="scrollToSection('#services')">
-            Serviços
-          </a>
-          <template v-else>
-            <span class="dropdown-trigger">Serviços</span>
-            <ul v-show="showDropdown" class="dropdown-menu">
-              <li><RouterLink to="/elojob">Elojob</RouterLink></li>
-              <li><RouterLink to="/duojob">Duojob</RouterLink></li>
-              <li><RouterLink to="/vitorias">Vitórias</RouterLink></li>
-            </ul>
-          </template>
+          <a href="#services" @click.prevent="scrollToSection('#services')">Serviços</a>
         </li>
-        <li v-if="isHome">
+        <li>
           <a href="#testimonials" @click.prevent="scrollToSection('#testimonials')">Reviews</a>
         </li>
       </ul>
+
+      <!-- Login button -->
       <button class="nav-cta" @click="emit('open-login')">ENTRAR</button>
     </nav>
   </header>
@@ -40,29 +49,43 @@ import { useRoute, useRouter } from 'vue-router'
 
 import logo from '@/assets/logo.png'
 
+// Router
 const route = useRoute()
 const router = useRouter()
-const isHome = computed(() => route.path === '/')
 
+// Emits
 const emit = defineEmits<{
   'open-login': []
 }>()
 
+// Computed
+const isHome = computed(() => route.path === '/')
+
+const headerClasses = computed(() => ({
+  'header-hidden': !isVisible.value,
+  'is-home': isHome.value,
+}))
+
+// Refs
 const isVisible = ref(true)
 const showDropdown = ref(false)
+
+// Scroll handling
 let lastScrollY = 0
-const scrollThreshold = 10
+const SCROLL_THRESHOLD = 10
 
 const handleScroll = () => {
   const currentScrollY = window.scrollY
 
-  if (currentScrollY < scrollThreshold) {
+  // Always show header at top of page
+  if (currentScrollY < SCROLL_THRESHOLD) {
     isVisible.value = true
     lastScrollY = currentScrollY
     return
   }
 
-  if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+  // Hide on scroll down, show on scroll up
+  if (currentScrollY > lastScrollY && currentScrollY > SCROLL_THRESHOLD) {
     isVisible.value = false
   } else if (currentScrollY < lastScrollY) {
     isVisible.value = true
@@ -71,6 +94,7 @@ const handleScroll = () => {
   lastScrollY = currentScrollY
 }
 
+// Lifecycle
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
 })
@@ -79,21 +103,22 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
+// Methods
 const scrollToSection = (selector: string) => {
   const element = document.querySelector(selector)
-  if (element) {
-    const elementPosition = element.getBoundingClientRect().top + window.scrollY
-    const currentPosition = window.scrollY
+  if (!element) return
 
-    if (elementPosition > currentPosition) {
-      const offset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4
-      window.scrollTo({
-        top: elementPosition + offset,
-        behavior: 'smooth',
-      })
-    } else {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
+  const elementPosition = element.getBoundingClientRect().top + window.scrollY
+  const currentPosition = window.scrollY
+
+  if (elementPosition > currentPosition) {
+    const offset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4
+    window.scrollTo({
+      top: elementPosition + offset,
+      behavior: 'smooth',
+    })
+  } else {
+    element.scrollIntoView({ behavior: 'smooth' })
   }
 }
 
@@ -105,6 +130,9 @@ const navigateToHome = () => {
 </script>
 
 <style scoped>
+/* ============================================
+   HEADER BASE STYLES
+   ============================================ */
 header {
   position: fixed;
   top: 0;
@@ -120,20 +148,26 @@ header {
   transform: translateY(0);
 }
 
+/* Home page specific styling */
 header.is-home {
   background: rgba(5, 8, 16, 0.4);
 }
 
+/* Non-home page styling */
 header:not(.is-home) {
   background-color: transparent;
   backdrop-filter: none;
   border: none;
 }
 
+/* Hidden state */
 header.header-hidden {
   transform: translateY(-100%);
 }
 
+/* ============================================
+   NAVIGATION LAYOUT
+   ============================================ */
 nav {
   max-width: 1600px;
   margin: 0 auto;
@@ -143,6 +177,15 @@ nav {
   align-items: center;
 }
 
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* ============================================
+   LOGO
+   ============================================ */
 .logo {
   height: 35px;
   width: auto;
@@ -156,14 +199,18 @@ nav {
   filter: drop-shadow(0 0 25px rgba(76, 186, 157, 0.8));
 }
 
+/* ============================================
+   NAVIGATION MENU (HOME PAGE)
+   ============================================ */
 .nav-menu {
   display: flex;
   gap: 3rem;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-menu a,
-.dropdown-trigger {
+.nav-menu a {
   color: #fff;
   text-decoration: none;
   font-size: 1.1rem;
@@ -178,7 +225,44 @@ nav {
     auto;
 }
 
-.nav-menu a::before,
+.nav-menu a::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s;
+}
+
+.nav-menu a:hover {
+  color: var(--primary);
+  text-shadow: 0 0 20px var(--primary);
+}
+
+.nav-menu a:hover::before {
+  width: 100%;
+}
+
+/* ============================================
+   DROPDOWN
+   ============================================ */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-trigger {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  position: relative;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
 .dropdown-trigger::before {
   content: '';
   position: absolute;
@@ -190,30 +274,19 @@ nav {
   transition: width 0.3s;
 }
 
-.nav-menu a:hover,
 .dropdown-trigger:hover {
   color: var(--primary);
   text-shadow: 0 0 20px var(--primary);
 }
 
-.nav-menu a:hover::before,
 .dropdown-trigger:hover::before {
   width: 100%;
 }
 
-/* Dropdown styles */
-.dropdown {
-  position: relative;
-}
-
-.dropdown-trigger {
-  cursor: pointer;
-}
-
 .dropdown-menu {
   position: absolute;
-  top: 2.5rem; /* Reduz o espaço */
-  left: 100%;
+  top: 2.5rem;
+  left: 50%;
   transform: translateX(-50%);
   background: rgba(5, 8, 16, 0.98);
   backdrop-filter: blur(20px);
@@ -224,9 +297,10 @@ nav {
   list-style: none;
   box-shadow: 0 8px 32px rgba(76, 186, 157, 0.3);
   animation: fadeIn 0.2s ease;
+  margin: 0;
 }
 
-/* Cria uma ponte invisível entre o trigger e o menu */
+/* Invisible bridge between trigger and menu */
 .dropdown-menu::before {
   content: '';
   position: absolute;
@@ -256,6 +330,8 @@ nav {
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   transition: all 0.3s;
+  color: #fff;
+  text-decoration: none;
 }
 
 .dropdown-menu a::before {
@@ -265,8 +341,12 @@ nav {
 .dropdown-menu a:hover {
   background: rgba(76, 186, 157, 0.1);
   padding-left: 2rem;
+  color: var(--primary);
 }
 
+/* ============================================
+   CTA BUTTON
+   ============================================ */
 .nav-cta {
   padding: 0.8rem 2rem;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -289,17 +369,33 @@ nav {
   box-shadow: 0 0 50px rgba(76, 186, 157, 0.8);
 }
 
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
-  .nav-menu {
-    display: none;
+  nav {
+    padding: 1rem 1.5rem;
   }
 
   .logo {
     height: 25px;
   }
 
-  nav {
-    padding: 1rem 1.5rem;
+  .nav-menu {
+    display: none;
+  }
+
+  .nav-left {
+    gap: 1rem;
+  }
+
+  .dropdown-trigger {
+    font-size: 0.9rem;
+  }
+
+  .nav-cta {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
   }
 }
 </style>

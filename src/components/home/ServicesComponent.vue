@@ -30,7 +30,7 @@ const services = [
     description: 'Boost completo sem sua participação',
     features: ['Menor preço', 'Entrega rápida', 'VPN + Proteção', 'Suporte 24/7'],
     buttonText: 'CONTRATAR ELOJOB',
-    route: '/elojob',
+    route: '/services/elojob',
   },
   {
     badge: null,
@@ -39,7 +39,7 @@ const services = [
     description: 'Suba de elo enquanto recebe feedbacks',
     features: ['Absorva enquanto joga', 'Com ou sem Discord', 'Horário combinado', 'Suporte 24/7'],
     buttonText: 'COMEÇAR DUO',
-    route: '/duojob',
+    route: '/services/duojob',
   },
   {
     badge: null,
@@ -48,7 +48,7 @@ const services = [
     description: 'Compre vitórias e gerencie o seu decay',
     features: ['Agende as partidas', 'Com ou sem duo', 'VPN + Proteção', 'Suporte 24/7'],
     buttonText: 'Comprar vitórias',
-    route: '/vitorias',
+    route: '/services/vitorias',
   },
 ]
 </script>
