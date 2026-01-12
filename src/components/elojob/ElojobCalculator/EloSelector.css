@@ -19,9 +19,9 @@
   box-shadow: 0 0 30px rgba(76, 186, 157, 0.2);
 }
 
-.grid-section:hover {
+/* .grid-section:hover {
   border-color: rgba(76, 186, 157, 0.5);
-}
+} opcional */
 
 .section-content {
   display: flex;
