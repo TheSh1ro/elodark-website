@@ -146,6 +146,7 @@ header {
     transform 0.3s ease-in-out,
     background 0.3s ease;
   transform: translateY(0);
+  max-height: 75px;
 }
 
 /* Home page specific styling */
@@ -171,10 +172,11 @@ header.header-hidden {
 nav {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 1.2rem 3rem;
+  padding: 1rem 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-height: 75px;
 }
 
 .nav-left {
