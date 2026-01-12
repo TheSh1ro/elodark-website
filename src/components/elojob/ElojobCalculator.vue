@@ -1,6 +1,5 @@
 <template>
   <section class="calculator-section">
-    <section class="section-title">DEFINIÇÕES DO SERVIÇO</section>
     <div class="calculator-grid">
       <!-- 1. Seleção de Elo Atual -->
       <EloSelector
@@ -34,6 +33,20 @@
         :show="showAdditionalOptions"
         @update:model-value="emitUpdate"
       />
+
+      <!-- 5. Seleção de Rotas -->
+      <RoleSelector
+        v-model="selectedRoles"
+        :show="showRoleSelector"
+        @update:model-value="emitUpdate"
+      />
+
+      <!-- 6. Seleção de Campeões -->
+      <ChampionSelector
+        :selected-champions="selectedChampions"
+        :show="showChampionSelector"
+        @update:selected-champions="updateSelectedChampions"
+      />
     </div>
 
     <!-- Modal de Divisões -->
@@ -50,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 
 // Componentes
 import EloSelector from './ElojobCalculator/EloSelector.vue'
@@ -58,10 +71,15 @@ import TargetEloSelector from './ElojobCalculator/TargetEloSelector.vue'
 import QueueSelector from './ElojobCalculator/QueueSelector.vue'
 import AdditionalOptions from './ElojobCalculator/AdditionalOptions.vue'
 import DivisionModal from './ElojobCalculator/DivisionModal.vue'
+import RoleSelector from './ElojobCalculator/RoleSelector.vue'
+import ChampionSelector from './ElojobCalculator/ChampionSelector.vue'
+
 // Types
 import type { ServiceData } from '@/types/serviceData'
 import type { EloData } from '@/types/eloData'
 import type { AdditionalOptionsData } from './ElojobCalculator/AdditionalOptions.vue'
+import type { RoleId } from './ElojobCalculator/RoleSelector.vue'
+import type { Champion } from './ElojobCalculator/ChampionSelector.vue'
 
 // Importar imagens dos ranks
 import emblemIron from '@/assets/emblems-rank/emblem-iron.png'
@@ -90,11 +108,11 @@ const props = withDefaults(
 // ============================================
 // ESTADO
 // ============================================
-const currentElo = ref<number | null>(null)
-const currentDivision = ref<number | null>(null)
+const currentElo = ref<number | null>(2)
+const currentDivision = ref<number | null>(1)
 
-const targetElo = ref<number | null>(null)
-const targetDivision = ref<number | null>(null)
+const targetElo = ref<number | null>(5)
+const targetDivision = ref<number | null>(3)
 
 const queue = ref('solo')
 
@@ -102,7 +120,15 @@ const options = ref<AdditionalOptionsData>({
   express: false,
   badMMR: false,
   specificChampions: false,
-  route: true,
+  route: false,
+})
+
+const selectedRoles = ref<RoleId[]>(['top', 'jungle', 'mid', 'adc', 'support'])
+const selectedChampions = ref<Champion[]>([])
+
+// Inicializar valores
+onMounted(() => {
+  emitUpdate()
 })
 
 // Modal
@@ -143,6 +169,16 @@ const showQueueSelector = computed(() => {
 
 const showAdditionalOptions = computed(() => {
   return targetElo.value !== null && targetDivision.value !== null
+})
+
+const showRoleSelector = computed(() => {
+  return options.value.route && targetElo.value !== null && targetDivision.value !== null
+})
+
+const showChampionSelector = computed(() => {
+  return (
+    options.value.specificChampions && targetElo.value !== null && targetDivision.value !== null
+  )
 })
 
 // ============================================
@@ -205,6 +241,14 @@ const closeDivisionModal = () => {
 }
 
 // ============================================
+// HANDLERS - ROLES E CAMPEÕES
+// ============================================
+const updateSelectedChampions = (champions: Champion[]) => {
+  selectedChampions.value = champions
+  emitUpdate()
+}
+
+// ============================================
 // LÓGICA DE AJUSTE
 // ============================================
 const getEloValue = (elo: number, division: number) => {
@@ -223,6 +267,8 @@ const adjustTargetAfterCurrentChange = () => {
   if (targetValue <= currentValue) {
     targetElo.value = null
     targetDivision.value = null
+  } else {
+    emitUpdate()
   }
 }
 
@@ -357,6 +403,26 @@ const emitUpdate = () => {
 }
 
 watch([options], emitUpdate, { deep: true })
+
+// Resetar rotas quando a opção for desmarcada
+watch(
+  () => options.value.route,
+  (newValue) => {
+    if (!newValue) {
+      selectedRoles.value = ['top', 'jungle', 'mid', 'adc', 'support']
+    }
+  },
+)
+
+// Resetar campeões quando a opção for desmarcada
+watch(
+  () => options.value.specificChampions,
+  (newValue) => {
+    if (!newValue) {
+      selectedChampions.value = []
+    }
+  },
+)
 </script>
 
 <style scoped>

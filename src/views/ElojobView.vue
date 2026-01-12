@@ -60,7 +60,8 @@ const updateData = (data: ServiceData) => {
 
 .elojob-page {
   min-height: 100vh;
-  padding: 8rem 3rem 3rem;
+  padding: 75px 3rem 8rem 3rem;
+  /* padding: 8rem 3rem 3rem; */
 }
 
 .elojob-container {
@@ -80,7 +81,7 @@ const updateData = (data: ServiceData) => {
 
 .elojob-right {
   position: sticky;
-  top: 100px;
+  top: 5rem;
 }
 
 /* Tablets e dispositivos menores */
