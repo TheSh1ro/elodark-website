@@ -1,5 +1,6 @@
 <template>
   <section class="calculator-section">
+    <section class="section-title">DEFINIÇÕES DO SERVIÇO</section>
     <div class="calculator-grid">
       <!-- 1. Seleção de Elo Atual -->
       <div
@@ -13,7 +14,7 @@
       >
         <!-- Modo Seleção -->
         <div v-if="showCurrentEloSelection" class="section-content">
-          <h3 class="section-title">
+          <h3 class="container-title">
             <span class="section-number">1</span>
             Qual seu elo atual?
           </h3>
@@ -58,7 +59,7 @@
         >
           <!-- Modo Seleção -->
           <div v-if="targetElo === null || targetDivision === null" class="section-content">
-            <h3 class="section-title">
+            <h3 class="container-title">
               <span class="section-number">2</span>
               Onde você quer chegar?
             </h3>
@@ -97,7 +98,7 @@
       <!-- 3. Tipo de Fila -->
       <transition name="slide-fade">
         <div v-if="targetElo !== null && targetDivision !== null" class="grid-section">
-          <h3 class="section-title">
+          <h3 class="container-title">
             <span class="section-number">3</span>
             Tipo de Fila
           </h3>
@@ -106,7 +107,6 @@
               <input type="radio" v-model="queue" value="solo" @change="emitUpdate" />
               <div class="queue-content">
                 <div class="queue-header">
-                  <span class="queue-icon">🎮</span>
                   <span class="queue-name">Ranqueada Solo/Duo</span>
                 </div>
               </div>
@@ -116,7 +116,6 @@
               <input type="radio" v-model="queue" value="flex" @change="emitUpdate" />
               <div class="queue-content">
                 <div class="queue-header">
-                  <span class="queue-icon">👥</span>
                   <span class="queue-name">Ranqueada Flex</span>
                 </div>
               </div>
@@ -128,20 +127,37 @@
       <!-- 4. Opções Adicionais -->
       <transition name="slide-fade">
         <div v-if="targetElo !== null && targetDivision !== null" class="grid-section">
-          <h3 class="section-title">
+          <h3 class="container-title">
             <span class="section-number">4</span>
             Opções Adicionais
           </h3>
           <div class="options-list">
             <label class="option-item">
+              <input type="checkbox" v-model="options.route" @change="emitUpdate" />
+              <div class="option-content">
+                <div class="option-header">
+                  <span class="option-icon">★</span>
+                  <span class="option-name">Escolher rota</span>
+                  <span class="option-badge">GRATUITO</span>
+                </div>
+                <p class="option-description">
+                  Selecione caso deseje escolher as rotas que o booster irá jogar durante o serviço
+                </p>
+              </div>
+            </label>
+
+            <label class="option-item">
               <input type="checkbox" v-model="options.express" @change="emitUpdate" />
               <div class="option-content">
                 <div class="option-header">
-                  <span class="option-icon">⚡</span>
+                  <span class="option-icon">★</span>
                   <span class="option-name">Prioridade Total</span>
                   <span class="option-badge">+30%</span>
                 </div>
-                <p class="option-description">Boost em até metade do tempo estimado</p>
+                <p class="option-description">
+                  Iniciaremos o serviço com prioridade máxima e terminaremos na maior velocidade
+                  possível
+                </p>
               </div>
             </label>
 
@@ -149,11 +165,13 @@
               <input type="checkbox" v-model="options.badMMR" @change="emitUpdate" />
               <div class="option-content">
                 <div class="option-header">
-                  <span class="option-icon">📉</span>
+                  <span class="option-icon">★</span>
                   <span class="option-name">MMR Baixo</span>
-                  <span class="option-badge">+15%</span>
+                  <span class="option-badge">+25%</span>
                 </div>
-                <p class="option-description">Para contas com MMR significativamente baixo</p>
+                <p class="option-description">
+                  Caso sua conta esteja ganhando menos pontos do que o normal selecione essa opção
+                </p>
               </div>
             </label>
 
@@ -161,11 +179,14 @@
               <input type="checkbox" v-model="options.specificChampions" @change="emitUpdate" />
               <div class="option-content">
                 <div class="option-header">
-                  <span class="option-icon">🎯</span>
+                  <span class="option-icon">★</span>
                   <span class="option-name">Campeões Específicos</span>
                   <span class="option-badge">+20%</span>
                 </div>
-                <p class="option-description">Escolha quais campeões serão utilizados no boost</p>
+                <p class="option-description">
+                  Escolha quais campeões serão utilizados no boost, útil se você for monochampion ou
+                  tiver uma pool específica
+                </p>
               </div>
             </label>
           </div>
@@ -234,6 +255,7 @@ const options = ref({
   express: false,
   badMMR: false,
   specificChampions: false,
+  route: true,
 })
 
 // Modal
@@ -245,20 +267,23 @@ const showCurrentEloSelection = computed(() => {
   return currentElo.value === null || currentDivision.value === null
 })
 const showTargetEloSelection = computed(() => {
-  return currentElo.value !== null && currentDivision.value !== null
+  return (
+    (currentElo.value !== null && currentDivision.value !== null) ||
+    (targetElo.value !== null && targetDivision.value !== null)
+  )
 })
 
 // Configuração dos Elos
 const allElos = [
-  { value: 0, label: 'Ferro', emblem: emblemIron, basePrice: 50, hasLeagues: true },
-  { value: 1, label: 'Bronze', emblem: emblemBronze, basePrice: 60, hasLeagues: true },
-  { value: 2, label: 'Prata', emblem: emblemSilver, basePrice: 80, hasLeagues: true },
-  { value: 3, label: 'Ouro', emblem: emblemGold, basePrice: 120, hasLeagues: true },
-  { value: 4, label: 'Platina', emblem: emblemPlatinum, basePrice: 180, hasLeagues: true },
-  { value: 5, label: 'Esmeralda', emblem: emblemEmerald, basePrice: 230, hasLeagues: true },
-  { value: 6, label: 'Diamante', emblem: emblemDiamond, basePrice: 280, hasLeagues: true },
-  { value: 7, label: 'Mestre', emblem: emblemMaster, basePrice: 450, hasLeagues: false },
-  { value: 8, label: 'Grão-Mestre', emblem: emblemGrandmaster, basePrice: 700, hasLeagues: false },
+  { value: 0, label: 'Ferro', emblem: emblemIron, basePrice: 9.9, hasLeagues: true },
+  { value: 1, label: 'Bronze', emblem: emblemBronze, basePrice: 11.9, hasLeagues: true },
+  { value: 2, label: 'Prata', emblem: emblemSilver, basePrice: 14.9, hasLeagues: true },
+  { value: 3, label: 'Ouro', emblem: emblemGold, basePrice: 14.9, hasLeagues: true },
+  { value: 4, label: 'Platina', emblem: emblemPlatinum, basePrice: 22.9, hasLeagues: true },
+  { value: 5, label: 'Esmeralda', emblem: emblemEmerald, basePrice: 29.9, hasLeagues: true },
+  { value: 6, label: 'Diamante', emblem: emblemDiamond, basePrice: 50, hasLeagues: true },
+  { value: 7, label: 'Mestre', emblem: emblemMaster, basePrice: 500, hasLeagues: false },
+  { value: 8, label: 'Grão-Mestre', emblem: emblemGrandmaster, basePrice: 800, hasLeagues: false },
 ]
 
 const currentElos = computed(() => allElos.filter((elo) => elo.value < props.maxElo))
@@ -401,16 +426,15 @@ const divisions = computed(() => {
 
     if (i === currentElo.value) {
       if (eloData?.hasLeagues) {
-        count += currentDivision.value! + 1
+        count += currentDivision.value! + 1 // Adicionar +1
       } else {
         count += 1
       }
     } else if (i === targetElo.value) {
       if (eloData?.hasLeagues) {
-        count += 4 - targetDivision.value!
-      } else {
-        count += 1
+        count += 3 - targetDivision.value! // Pode ser 0
       }
+      // Elos sem ligas no final: não adiciona nada
     } else {
       if (eloData?.hasLeagues) {
         count += 4
@@ -429,31 +453,47 @@ const basePrice = computed(() => {
   let total = 0
 
   if (currentElo.value === targetElo.value) {
+    // Mesmo elo: apenas a diferença
     const divCount = currentDivision.value! - targetDivision.value!
     const elo = allElos[currentElo.value]
-    return elo?.basePrice ? elo.basePrice * divCount : 0
+    const price = elo?.basePrice ? elo.basePrice * divCount : 0
+
+    return price
   }
 
   for (let i = currentElo.value; i <= targetElo.value; i++) {
     const eloData = allElos[i]
 
-    if (!eloData) continue
+    if (!eloData) {
+      continue
+    }
 
     if (i === currentElo.value) {
+      // Elo inicial: contar divisões da atual até sair do elo
       if (eloData.hasLeagues) {
-        total += eloData.basePrice * (currentDivision.value! + 1)
+        // Se está em Ferro IV (div 3): precisa subir IV→III→II→I = 4 divisões (3+1)
+        const divisionsToCount = currentDivision.value! + 1
+        const divisionPrice = eloData.basePrice * divisionsToCount
+        total += divisionPrice
       } else {
         total += eloData.basePrice
       }
     } else if (i === targetElo.value) {
+      // Elo final: contar divisões DENTRO do elo de destino
       if (eloData.hasLeagues) {
-        total += eloData.basePrice * (4 - targetDivision.value!)
+        const divisionsToCount = 3 - targetDivision.value!
+        if (divisionsToCount > 0) {
+          const divisionPrice = eloData.basePrice * divisionsToCount
+          total += divisionPrice
+        }
       } else {
-        total += eloData.basePrice
+        // Elos sem ligas como destino: não cobra nada (já chegou)
       }
     } else {
+      // Elos intermediários: todas as 4 divisões
       if (eloData.hasLeagues) {
-        total += eloData.basePrice * 4
+        const divisionPrice = eloData.basePrice * 4
+        total += divisionPrice
       } else {
         total += eloData.basePrice
       }
@@ -466,9 +506,10 @@ const basePrice = computed(() => {
 const finalPrice = computed(() => {
   let price = basePrice.value
   if (options.value.express) price *= 1.3
-  if (options.value.badMMR) price *= 1.15
+  if (options.value.badMMR) price *= 1.25
   if (options.value.specificChampions) price *= 1.2
-  return Math.round(price)
+  if (options.value.route) price *= 1.0
+  return parseFloat(price.toFixed(2))
 })
 
 const estimatedTime = computed(() => {
@@ -494,7 +535,11 @@ watch([options], emitUpdate, { deep: true })
 
 <style scoped>
 .calculator-section {
+  display: grid;
+  align-content: start;
+  gap: 3rem;
   width: 100%;
+  min-height: calc(100vh - 80px);
 }
 
 /* Grid Principal */
@@ -531,7 +576,7 @@ watch([options], emitUpdate, { deep: true })
   gap: 1rem;
 }
 
-.section-title {
+.container-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
@@ -734,10 +779,6 @@ watch([options], emitUpdate, { deep: true })
   gap: 0.75rem;
 }
 
-.queue-icon {
-  font-size: 1.3rem;
-}
-
 .queue-name {
   font-family: 'Orbitron', sans-serif;
   font-size: 1rem;
@@ -807,7 +848,7 @@ watch([options], emitUpdate, { deep: true })
   color: var(--secondary);
   background: rgba(0, 255, 245, 0.1);
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  border-radius: 6px;
   border: 1px solid var(--secondary);
 }
 
@@ -996,7 +1037,7 @@ watch([options], emitUpdate, { deep: true })
     padding: 1rem;
   }
 
-  .section-title {
+  .container-title {
     font-size: 1rem;
   }
 

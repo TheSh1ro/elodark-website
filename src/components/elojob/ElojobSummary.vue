@@ -30,7 +30,6 @@
 
     <button class="btn-primary">
       <span>CONTRATAR AGORA</span>
-      <span class="btn-icon">→</span>
     </button>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <footer>
     <div class="footer-content">
-      <div class="footer-logo">ELODARK</div>
+      <div class="footer-logo">NEWELO</div>
       <p class="footer-subtitle">A plataforma de boost mais confiável do Brasil</p>
       <div class="social-links">
         <a href="#">＠</a>
@@ -9,7 +9,7 @@
         <a href="#">▶</a>
         <a href="#">✉</a>
       </div>
-      <p class="footer-copyright">© 2026 ELODARK. Todos os direitos reservados.</p>
+      <p class="footer-copyright">© 2026 NEWELO. Todos os direitos reservados.</p>
       <p class="footer-notice">Não afiliado ou endossado pela Riot Games</p>
     </div>
   </footer>

@@ -52,7 +52,7 @@ const processSteps = [
 
 <style scoped>
 .elojob-process {
-  padding: 4rem 3rem;
+  padding-inline: 3rem;
 }
 
 .process-container {

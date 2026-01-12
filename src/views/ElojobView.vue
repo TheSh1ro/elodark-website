@@ -73,13 +73,12 @@ const updateData = (data: any) => {
 .elojob-left {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 9rem;
 }
 
 .elojob-right {
   position: sticky;
   top: 100px;
-  align-self: start;
 }
 
 /* Tablets e dispositivos menores */

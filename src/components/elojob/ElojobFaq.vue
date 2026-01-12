@@ -76,7 +76,7 @@ const toggleFaq = (id: number) => {
 
 <style scoped>
 .elojob-faq {
-  padding: 6rem 3rem;
+  padding-inline: 3rem;
 }
 
 .faq-container {

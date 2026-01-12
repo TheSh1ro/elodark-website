@@ -3,9 +3,9 @@
   <div class="scanline"></div>
 
   <HeroSection />
+  <ServicesComponent />
   <CarersCarousel />
   <AboutComponent />
-  <ServicesComponent />
   <TestimonialsComponent />
 </template>
 <script lang="ts">

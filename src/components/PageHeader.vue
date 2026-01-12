@@ -1,12 +1,31 @@
 <template>
-  <header :class="{ 'header-hidden': !isVisible }">
+  <header :class="{ 'header-hidden': !isVisible, 'is-home': isHome }">
     <nav>
-      <div class="logo">ELODARK</div>
+      <img class="logo" @click="navigateToHome" :src="logo" />
       <ul class="nav-menu">
-        <li><a href="#home" @click.prevent="scrollToSection('#home')">Início</a></li>
-        <li><a href="#boosters" @click.prevent="scrollToSection('#boosters')">Boosters</a></li>
-        <li><a href="#services" @click.prevent="scrollToSection('#services')">Serviços</a></li>
         <li>
+          <a v-if="isHome" href="#home" @click.prevent="scrollToSection('#home')">Início</a>
+        </li>
+        <li>
+          <a v-if="isHome" href="#boosters" @click.prevent="scrollToSection('#boosters')">
+            Boosters
+          </a>
+          <RouterLink v-else to="/booster">Boosters</RouterLink>
+        </li>
+        <li class="dropdown" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
+          <a v-if="isHome" href="#services" @click.prevent="scrollToSection('#services')">
+            Serviços
+          </a>
+          <template v-else>
+            <span class="dropdown-trigger">Serviços</span>
+            <ul v-show="showDropdown" class="dropdown-menu">
+              <li><RouterLink to="/elojob">Elojob</RouterLink></li>
+              <li><RouterLink to="/duojob">Duojob</RouterLink></li>
+              <li><RouterLink to="/vitorias">Vitórias</RouterLink></li>
+            </ul>
+          </template>
+        </li>
+        <li v-if="isHome">
           <a href="#testimonials" @click.prevent="scrollToSection('#testimonials')">Reviews</a>
         </li>
       </ul>
@@ -16,32 +35,36 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+import logo from '@/assets/logo.png'
+
+const route = useRoute()
+const router = useRouter()
+const isHome = computed(() => route.path === '/')
 
 const emit = defineEmits<{
   'open-login': []
 }>()
 
 const isVisible = ref(true)
+const showDropdown = ref(false)
 let lastScrollY = 0
-const scrollThreshold = 10 // Pixels de scroll antes de ativar
+const scrollThreshold = 10
 
 const handleScroll = () => {
   const currentScrollY = window.scrollY
 
-  // Se está no topo, sempre mostra
   if (currentScrollY < scrollThreshold) {
     isVisible.value = true
     lastScrollY = currentScrollY
     return
   }
 
-  // Scrollando para baixo - esconde
   if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
     isVisible.value = false
-  }
-  // Scrollando para cima - mostra
-  else if (currentScrollY < lastScrollY) {
+  } else if (currentScrollY < lastScrollY) {
     isVisible.value = true
   }
 
@@ -62,7 +85,6 @@ const scrollToSection = (selector: string) => {
     const elementPosition = element.getBoundingClientRect().top + window.scrollY
     const currentPosition = window.scrollY
 
-    // Se estiver scrollando para baixo, adiciona offset de 4rem
     if (elementPosition > currentPosition) {
       const offset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4
       window.scrollTo({
@@ -70,9 +92,14 @@ const scrollToSection = (selector: string) => {
         behavior: 'smooth',
       })
     } else {
-      // Se for para cima, scroll normal
       element.scrollIntoView({ behavior: 'smooth' })
     }
+  }
+}
+
+const navigateToHome = () => {
+  if (!isHome.value) {
+    router.push('/')
   }
 }
 </script>
@@ -83,15 +110,26 @@ header {
   top: 0;
   width: 100%;
   z-index: 1000;
-  background: rgba(5, 8, 16, 0.4);
+  background: rgba(5, 8, 16, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 2px solid transparent;
   border-image: linear-gradient(90deg, transparent, var(--primary), transparent) 1;
-  transition: transform 0.3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    background 0.3s ease;
   transform: translateY(0);
 }
 
-/* Classe para esconder o header */
+header.is-home {
+  background: rgba(5, 8, 16, 0.4);
+}
+
+header:not(.is-home) {
+  background-color: transparent;
+  backdrop-filter: none;
+  border: none;
+}
+
 header.header-hidden {
   transform: translateY(-100%);
 }
@@ -106,36 +144,16 @@ nav {
 }
 
 .logo {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: 3px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 20px var(--primary));
-  text-transform: uppercase;
-  position: relative;
+  height: 35px;
+  width: auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 15px rgba(76, 186, 157, 0.5));
 }
 
-.logo::before {
-  content: '>';
-  position: absolute;
-  left: -30px;
-  color: var(--primary);
-  animation: blink 1.5s infinite;
-}
-
-@keyframes blink {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
+.logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 25px rgba(76, 186, 157, 0.8));
 }
 
 .nav-menu {
@@ -144,7 +162,8 @@ nav {
   list-style: none;
 }
 
-.nav-menu a {
+.nav-menu a,
+.dropdown-trigger {
   color: #fff;
   text-decoration: none;
   font-size: 1.1rem;
@@ -159,7 +178,8 @@ nav {
     auto;
 }
 
-.nav-menu a::before {
+.nav-menu a::before,
+.dropdown-trigger::before {
   content: '';
   position: absolute;
   bottom: -5px;
@@ -170,13 +190,81 @@ nav {
   transition: width 0.3s;
 }
 
-.nav-menu a:hover {
+.nav-menu a:hover,
+.dropdown-trigger:hover {
   color: var(--primary);
   text-shadow: 0 0 20px var(--primary);
 }
 
-.nav-menu a:hover::before {
+.nav-menu a:hover::before,
+.dropdown-trigger:hover::before {
   width: 100%;
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-trigger {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 2.5rem; /* Reduz o espaço */
+  left: 100%;
+  transform: translateX(-50%);
+  background: rgba(5, 8, 16, 0.98);
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  min-width: 180px;
+  list-style: none;
+  box-shadow: 0 8px 32px rgba(76, 186, 157, 0.3);
+  animation: fadeIn 0.2s ease;
+}
+
+/* Cria uma ponte invisível entre o trigger e o menu */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  right: 0;
+  height: 1.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.dropdown-menu li {
+  padding: 0;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.dropdown-menu a::before {
+  display: none;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(76, 186, 157, 0.1);
+  padding-left: 2rem;
 }
 
 .nav-cta {
@@ -201,10 +289,17 @@ nav {
   box-shadow: 0 0 50px rgba(76, 186, 157, 0.8);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .nav-menu {
     display: none;
+  }
+
+  .logo {
+    height: 25px;
+  }
+
+  nav {
+    padding: 1rem 1.5rem;
   }
 }
 </style>
