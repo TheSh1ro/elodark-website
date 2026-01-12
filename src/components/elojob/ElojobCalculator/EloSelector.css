@@ -1,0 +1,244 @@
+/* ============================================
+   ESTILOS COMPARTILHADOS - ELOJOB CALCULATOR
+   ============================================ */
+
+/* Grid Section Base */
+.grid-section {
+  background: var(--dark);
+  border: 1px solid rgba(76, 186, 157, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.grid-section.active-section {
+  border-color: var(--primary);
+  box-shadow: 0 0 30px rgba(76, 186, 157, 0.2);
+}
+
+.grid-section:hover {
+  border-color: rgba(76, 186, 157, 0.5);
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.container-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary);
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* Grid de Elos */
+.elo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-rows: 1fr;
+  gap: 1rem;
+}
+
+.elo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0.75rem;
+  background: var(--darker);
+  border: 2px solid rgba(76, 186, 157, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.elo-item:hover:not(.disabled) {
+  border-color: var(--primary);
+  background: rgba(76, 186, 157, 0.05);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(76, 186, 157, 0.2);
+}
+
+.elo-item.selected {
+  border-color: var(--primary);
+  background: rgba(76, 186, 157, 0.1);
+  box-shadow: 0 0 20px rgba(76, 186, 157, 0.3);
+}
+
+.elo-item.disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+.elo-emblem {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(76, 186, 157, 0.3));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.elo-item:hover:not(.disabled) .elo-emblem {
+  filter: drop-shadow(0 4px 12px rgba(76, 186, 157, 0.6));
+  transform: scale(1.1);
+}
+
+.elo-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Seção Compacta */
+.compact-section {
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+}
+
+.compact-section:hover {
+  background: rgba(76, 186, 157, 0.05);
+  box-shadow: 0 0 20px rgba(76, 186, 157, 0.2);
+}
+
+.compact-section:hover .compact-edit {
+  color: var(--secondary);
+  transform: scale(1.05);
+}
+
+.compact-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.compact-content:hover {
+  opacity: 0.9;
+}
+
+.compact-label {
+  font-family: 'Rajdhani', sans-serif;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compact-label .section-number {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+}
+
+.compact-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.compact-emblem {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(76, 186, 157, 0.5));
+}
+
+.compact-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--secondary);
+  flex: 1;
+}
+
+.compact-edit {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animações */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .grid-section {
+    padding: 1.25rem;
+  }
+
+  .elo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .elo-emblem {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-section {
+    padding: 1rem;
+  }
+
+  .container-title {
+    font-size: 1rem;
+  }
+
+  .elo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .elo-item {
+    padding: 0.75rem 0.5rem;
+  }
+}
