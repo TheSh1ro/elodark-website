@@ -8,11 +8,9 @@
 
       <div class="champion-selector-content">
         <button class="select-champions-btn" @click="openModal">
-          <span class="btn-icon">🎯</span>
+          <span class="btn-icon">//</span>
           <span class="btn-text">{{
-            selectedChampions.length === 0
-              ? 'Escolher Campeões'
-              : `${selectedChampions.length} Campeão${selectedChampions.length > 1 ? 'es' : ''} Selecionado${selectedChampions.length > 1 ? 's' : ''}`
+            selectedChampions.length === 0 ? 'Escolher Campeões' : `Alterar Campeões`
           }}</span>
         </button>
 
@@ -35,9 +33,7 @@
       <div v-if="showModal" class="modal-overlay" @click="closeModal">
         <div class="modal-content" @click.stop>
           <h3 class="modal-title">Selecionar Campeões</h3>
-          <p class="modal-placeholder">
-            🚧 Modal de seleção de campeões será implementado em breve
-          </p>
+          <p class="modal-placeholder">Modal de seleção de campeões ainda será criado ;/</p>
           <button class="modal-close" @click="closeModal">✕</button>
         </div>
       </div>
