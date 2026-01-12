@@ -1,7 +1,7 @@
 <template>
   <transition name="slide-fade">
     <div v-if="show" class="grid-section">
-      <h3 class="container-title">
+      <h3 class="container-title compact-label">
         <span class="section-number">4</span>
         Opções Adicionais
       </h3>
@@ -101,6 +101,8 @@ const toggleOption = (key: keyof AdditionalOptionsData) => {
 </script>
 
 <style scoped>
+@import './EloSelector.css';
+
 /* Opções Adicionais */
 .options-list {
   display: flex;

@@ -31,9 +31,9 @@
 
 .container-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: white;
+  color: rgb(200, 200, 200);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0;
@@ -148,7 +148,7 @@
   color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.5rem;

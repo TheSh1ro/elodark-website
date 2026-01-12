@@ -1,7 +1,7 @@
 <template>
   <transition name="slide-fade">
     <div v-if="show" class="grid-section">
-      <h3 class="container-title">
+      <h3 class="container-title compact-label">
         <span class="section-number">3</span>
         Tipo de Fila
       </h3>
@@ -38,7 +38,7 @@ interface Emits {
   (e: 'update:modelValue', value: string): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const selectQueue = (queue: string) => {
@@ -47,6 +47,8 @@ const selectQueue = (queue: string) => {
 </script>
 
 <style scoped>
+@import './EloSelector.css';
+
 /* Tipo de Fila */
 .queue-buttons {
   display: grid;
