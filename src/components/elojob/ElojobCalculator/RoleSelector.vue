@@ -19,7 +19,7 @@
             @change="toggleRole(role.id)"
           />
           <div class="role-content">
-            <span class="role-icon">{{ role.icon }}</span>
+            <img class="role-icon" :src="role.icon" />
             <span class="role-name">{{ role.name }}</span>
           </div>
         </label>
@@ -33,6 +33,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+
+import iconAdcarry from '@/assets/icons-role/adc.png'
+import iconSupport from '@/assets/icons-role/support.png'
+import iconMidlaner from '@/assets/icons-role/mid.png'
+import iconJungler from '@/assets/icons-role/jungle.png'
+import iconToplaner from '@/assets/icons-role/top.png'
 
 export type RoleId = 'top' | 'jungle' | 'mid' | 'adc' | 'support'
 
@@ -55,11 +61,11 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const roles: Role[] = [
-  { id: 'top', name: 'Top', icon: '⚔️' },
-  { id: 'jungle', name: 'Jungle', icon: '🌳' },
-  { id: 'mid', name: 'Mid', icon: '✨' },
-  { id: 'adc', name: 'ADC', icon: '🏹' },
-  { id: 'support', name: 'Suporte', icon: '🛡️' },
+  { id: 'top', name: 'Top', icon: iconToplaner },
+  { id: 'jungle', name: 'Jungle', icon: iconJungler },
+  { id: 'mid', name: 'Mid', icon: iconMidlaner },
+  { id: 'adc', name: 'ADC', icon: iconAdcarry },
+  { id: 'support', name: 'Suporte', icon: iconSupport },
 ]
 
 const isRoleDisabled = computed(() => (roleId: RoleId) => {
