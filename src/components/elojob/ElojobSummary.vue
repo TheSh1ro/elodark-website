@@ -26,8 +26,13 @@
           <span class="summary-value">{{ divisions || '--' }}</span>
         </div>
 
-        <!-- Mostra rotas  -->
         <div class="summary-item summary-item-full">
+          <span class="summary-label">Fila</span>
+          <span class="summary-value">{{ formattedQueue || '--' }}</span>
+        </div>
+
+        <!-- Mostra rotas  -->
+        <div v-if="showRoles" class="summary-item summary-item-full">
           <span class="summary-label">Lanes</span>
           <span class="summary-value">{{
             selectedRoles.length === 5 || !props.additionalOptions.role ? 'Todas' : formattedRoles
@@ -37,10 +42,13 @@
         <!-- Mostra campeões apenas se a opção estiver ativa E houver campeões selecionados -->
         <div v-if="showChampions" class="summary-item summary-item-full">
           <span class="summary-label">Campeões</span>
-          <div class="champions-list">
+          <div v-if="selectedChampions.length" class="champions-list">
             <span v-for="champion in selectedChampions" :key="champion.id" class="champion-tag">
               {{ champion.name }}
             </span>
+          </div>
+          <div v-else class="summary-value">
+            {{ !props.additionalOptions.specificChampions ? 'Qualquer' : 'Aguardando seleção' }}
           </div>
         </div>
       </div>
@@ -64,6 +72,7 @@ import { computed } from 'vue'
 import type { RoleId } from '@/types/roleTypes'
 import type { Champion } from '@/types/championTypes'
 import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
+import type { QueueType } from '@/types/queueTypes'
 
 const props = defineProps<{
   currentElo: string
@@ -74,6 +83,7 @@ const props = defineProps<{
   selectedRoles: RoleId[]
   selectedChampions: Champion[]
   additionalOptions: AdditionalOptionsData
+  queueType: QueueType
 }>()
 
 // Mapeamento de roles para nomes em português
@@ -85,14 +95,18 @@ const roleNames: Record<RoleId, string> = {
   support: 'Sup',
 }
 
-// Mostra roles apenas se a opção estiver ativa E houver menos de 5 roles selecionadas
-// const showRoles = computed(() => {
-//   return props.additionalOptions.role && props.selectedRoles.length < 5
-// })
+// Verifica se deve mostrar as roles selecionadas
+const showRoles = computed(() => {
+  return props.additionalOptions.role
+})
 
-// Mostra campeões apenas se a opção estiver ativa e houver campeões selecionados
+// Verifica se deve mostrar os campeões selecionados
 const showChampions = computed(() => {
-  return props.additionalOptions.specificChampions && props.selectedChampions.length > 0
+  return props.additionalOptions.specificChampions
+})
+
+const formattedQueue = computed(() => {
+  return props.queueType === 'solo' ? 'Ranqueada Solo/Duo' : 'Ranqueada Flexível'
 })
 
 // Formata as roles para exibição

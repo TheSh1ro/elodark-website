@@ -80,6 +80,7 @@ import type { EloData } from '@/types/eloData'
 import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
 import type { RoleId } from '@/types/roleTypes'
 import type { Champion } from '@/types/championTypes'
+import type { QueueType } from '@/types/queueTypes'
 
 // Importar imagens dos ranks
 import emblemIron from '@/assets/emblems-rank/emblem-iron.png'
@@ -110,12 +111,9 @@ const props = withDefaults(
 // ============================================
 const currentElo = ref<number | null>(2)
 const currentDivision = ref<number | null>(1)
-
 const targetElo = ref<number | null>(5)
 const targetDivision = ref<number | null>(3)
-
-const queue = ref('solo')
-
+const queue = ref<QueueType>('solo')
 const options = ref<AdditionalOptionsData>({
   express: false,
   badMMR: false,
@@ -406,6 +404,7 @@ const emitUpdate = () => {
     selectedRoles: selectedRoles.value,
     selectedChampions: selectedChampions.value,
     additionalOptions: options.value,
+    queueType: queue.value,
   })
 }
 

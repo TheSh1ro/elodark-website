@@ -20,6 +20,7 @@
           :selected-roles="selectedRoles"
           :selected-champions="selectedChampions"
           :additional-options="additionalOptions"
+          :queue-type="queueType"
         />
       </div>
     </div>
@@ -38,6 +39,7 @@ import type { ServiceData } from '@/types/serviceData'
 import type { RoleId } from '@/types/roleTypes'
 import type { Champion } from '@/types/championTypes'
 import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
+import type { QueueType } from '@/types/queueTypes'
 
 const currentElo = ref('')
 const targetElo = ref('')
@@ -52,6 +54,7 @@ const additionalOptions = ref<AdditionalOptionsData>({
   specificChampions: false,
   role: false,
 })
+const queueType = ref<QueueType>('solo')
 
 const updateData = (data: ServiceData) => {
   currentElo.value = data.currentElo ?? currentElo.value
@@ -62,6 +65,7 @@ const updateData = (data: ServiceData) => {
   selectedRoles.value = data.selectedRoles ?? selectedRoles.value
   selectedChampions.value = data.selectedChampions ?? selectedChampions.value
   additionalOptions.value = data.additionalOptions ?? additionalOptions.value
+  queueType.value = data.queueType ?? queueType.value
 }
 </script>
 
