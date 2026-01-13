@@ -38,13 +38,13 @@
 
         <!-- Champions Grid -->
         <div class="champions-container">
-          <div v-if="loading" class="loading-state">
+          <div v-if="configStore.loading" class="loading-state">
             <div class="loading-spinner"></div>
             <p>Carregando campeões...</p>
           </div>
 
-          <div v-else-if="error" class="error-state">
-            <p>{{ error }}</p>
+          <div v-else-if="configStore.error" class="error-state">
+            <p>{{ configStore.error }}</p>
             <button class="retry-btn" @click="loadChampions">Tentar Novamente</button>
           </div>
 
@@ -62,7 +62,7 @@
             >
               <div class="champion-image-container">
                 <img
-                  :src="getChampionImageUrl(champion.image.full)"
+                  :src="configStore.getChampionImageUrl(champion.image.full)"
                   :alt="champion.name"
                   class="champion-image"
                   loading="lazy"
@@ -91,16 +91,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-
+import { useConfigStore } from '@/stores/configStore'
 import type { Champion } from '@/types/championTypes'
-
-interface ChampionData {
-  id: string
-  name: string
-  image: {
-    full: string
-  }
-}
 
 interface Props {
   modelValue: boolean
@@ -115,45 +107,39 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const champions = ref<ChampionData[]>([])
-const loading = ref(false)
-const error = ref('')
+// ============================================
+// STORES
+// ============================================
+const configStore = useConfigStore()
+
+// ============================================
+// STATE
+// ============================================
 const searchQuery = ref('')
 const selectedIds = ref(new Set<string>())
 
-const CDN_VERSION = '13.12.1'
-const CHAMPIONS_URL = `https://ddragon.leagueoflegends.com/cdn/${CDN_VERSION}/data/pt_BR/champion.json`
-
-const getChampionImageUrl = (imageName: string) => {
-  return `https://ddragon.leagueoflegends.com/cdn/${CDN_VERSION}/img/champion/${imageName}`
-}
-
+// ============================================
+// COMPUTED
+// ============================================
 const filteredChampions = computed(() => {
-  if (!searchQuery.value) return champions.value
+  if (!searchQuery.value) return configStore.champions
 
   const query = searchQuery.value.toLowerCase().trim()
-  return champions.value.filter((champion) => champion.name.toLowerCase().includes(query))
+  return configStore.champions.filter((champion) => champion.name.toLowerCase().includes(query))
 })
 
+// ============================================
+// METHODS
+// ============================================
 const loadChampions = async () => {
-  loading.value = true
-  error.value = ''
-
   try {
-    const response = await fetch(CHAMPIONS_URL)
-    if (!response.ok) throw new Error('Falha ao carregar campeões')
-
-    const data = await response.json()
-    champions.value = Object.values(data.data) as ChampionData[]
+    await configStore.fetchChampions()
   } catch (err) {
-    error.value = 'Erro ao carregar campeões. Verifique sua conexão.'
-    console.error('Error loading champions:', err)
-  } finally {
-    loading.value = false
+    console.error('Error loading champions in modal:', err)
   }
 }
 
-const toggleChampion = (champion: ChampionData) => {
+const toggleChampion = (champion: (typeof configStore.champions)[0]) => {
   if (selectedIds.value.has(champion.id)) {
     selectedIds.value.delete(champion.id)
   } else {
@@ -166,12 +152,12 @@ const clearSelection = () => {
 }
 
 const confirm = () => {
-  const selected: Champion[] = champions.value
+  const selected: Champion[] = configStore.champions
     .filter((c) => selectedIds.value.has(c.id))
     .map((c) => ({
       id: c.id,
       name: c.name,
-      icon: getChampionImageUrl(c.image.full),
+      icon: configStore.getChampionImageUrl(c.image.full),
     }))
 
   emit('confirm', selected)
@@ -182,18 +168,28 @@ const close = () => {
   emit('update:modelValue', false)
 }
 
-// Initialize selected champions from props
+// ============================================
+// WATCHERS
+// ============================================
 watch(
   () => props.modelValue,
   (isOpen) => {
     if (isOpen) {
+      // Sincroniza seleção com props
       selectedIds.value = new Set(props.selectedChampions.map((c) => c.id))
       searchQuery.value = ''
+
+      // Carrega campeões se necessário (usa cache do store)
+      loadChampions()
     }
   },
 )
 
+// ============================================
+// LIFECYCLE
+// ============================================
 onMounted(() => {
+  // Pré-carrega campeões ao montar o componente
   loadChampions()
 })
 </script>
@@ -389,7 +385,6 @@ onMounted(() => {
   line-height: 1;
 }
 
-/* Search Bar */
 .search-container {
   position: relative;
   display: flex;
@@ -445,7 +440,6 @@ onMounted(() => {
   transform: scale(1.2);
 }
 
-/* Selected Count */
 .selected-count {
   display: flex;
   align-items: center;
@@ -472,7 +466,6 @@ onMounted(() => {
   font-weight: 700;
 }
 
-/* Champions Container */
 .champions-container {
   flex: 1;
   overflow-y: auto;
@@ -499,7 +492,6 @@ onMounted(() => {
   background: var(--secondary);
 }
 
-/* Grid States */
 .loading-state,
 .error-state,
 .empty-state {
@@ -550,7 +542,6 @@ onMounted(() => {
   box-shadow: 0 0 20px var(--primary);
 }
 
-/* Champions Grid */
 .champions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -655,7 +646,6 @@ onMounted(() => {
   transform: translateY(0);
 }
 
-/* Action Buttons */
 .modal-actions {
   display: flex;
   gap: 1rem;
@@ -740,7 +730,6 @@ onMounted(() => {
   background: var(--dark);
 }
 
-/* Transitions */
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.3s ease;
@@ -766,7 +755,6 @@ onMounted(() => {
   opacity: 0;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .modal-content {
     padding: 1.5rem;

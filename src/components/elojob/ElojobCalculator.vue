@@ -7,7 +7,7 @@
         v-model="currentElo"
         :division="currentDivision"
         :available-elos="currentElos"
-        :all-elos="allElos"
+        :all-elos="configStore.elosPricing"
         @select-elo="handleCurrentEloSelect"
         @edit="editCurrentElo"
       />
@@ -17,7 +17,7 @@
         v-model="targetElo"
         :division="targetDivision"
         :available-elos="targetElos"
-        :all-elos="allElos"
+        :all-elos="configStore.elosPricing"
         :current-elo="currentElo"
         :current-division="currentDivision"
         :show="showTargetEloSelection"
@@ -65,6 +65,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
+import { useConfigStore } from '@/stores/configStore'
 
 // Componentes
 import EloSelector from './ElojobCalculator/EloSelector.vue'
@@ -77,22 +78,10 @@ import ChampionSelector from './ElojobCalculator/ChampionSelector.vue'
 
 // Types
 import type { ServiceData } from '@/types/serviceData'
-import type { EloData } from '@/types/eloData'
 import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
 import type { RoleId } from '@/types/roleTypes'
 import type { Champion } from '@/types/championTypes'
 import type { QueueType } from '@/types/queueTypes'
-
-// Importar imagens dos ranks
-import emblemIron from '@/assets/emblems-rank/emblem-iron.png'
-import emblemBronze from '@/assets/emblems-rank/emblem-bronze.png'
-import emblemSilver from '@/assets/emblems-rank/emblem-silver.png'
-import emblemGold from '@/assets/emblems-rank/emblem-gold.png'
-import emblemPlatinum from '@/assets/emblems-rank/emblem-platinum.png'
-import emblemEmerald from '@/assets/emblems-rank/emblem-emerald.png'
-import emblemDiamond from '@/assets/emblems-rank/emblem-diamond.png'
-import emblemMaster from '@/assets/emblems-rank/emblem-master.png'
-import emblemGrandmaster from '@/assets/emblems-rank/emblem-grandmaster.png'
 
 const emit = defineEmits<{
   update: [data: ServiceData]
@@ -106,6 +95,11 @@ const props = withDefaults(
     maxElo: 8,
   },
 )
+
+// ============================================
+// STORES
+// ============================================
+const configStore = useConfigStore()
 
 // ============================================
 // ESTADO
@@ -135,22 +129,10 @@ const showDivisionModal = ref(false)
 const modalMode = ref<'current' | 'target'>('current')
 
 // ============================================
-// CONFIGURAÇÃO DE ELOS
+// COMPUTED - ELOS DISPONÍVEIS
 // ============================================
-const allElos: EloData[] = [
-  { value: 0, label: 'Ferro', emblem: emblemIron, basePrice: 9.9, hasLeagues: true },
-  { value: 1, label: 'Bronze', emblem: emblemBronze, basePrice: 11.9, hasLeagues: true },
-  { value: 2, label: 'Prata', emblem: emblemSilver, basePrice: 14.9, hasLeagues: true },
-  { value: 3, label: 'Ouro', emblem: emblemGold, basePrice: 14.9, hasLeagues: true },
-  { value: 4, label: 'Platina', emblem: emblemPlatinum, basePrice: 22.9, hasLeagues: true },
-  { value: 5, label: 'Esmeralda', emblem: emblemEmerald, basePrice: 29.9, hasLeagues: true },
-  { value: 6, label: 'Diamante', emblem: emblemDiamond, basePrice: 50, hasLeagues: true },
-  { value: 7, label: 'Mestre', emblem: emblemMaster, basePrice: 500, hasLeagues: false },
-  { value: 8, label: 'Grão-Mestre', emblem: emblemGrandmaster, basePrice: 800, hasLeagues: false },
-]
-
-const currentElos = computed(() => allElos.filter((elo) => elo.value < props.maxElo))
-const targetElos = computed(() => allElos.filter((elo) => elo.value <= props.maxElo))
+const currentElos = computed(() => configStore.getCurrentElos(props.maxElo))
+const targetElos = computed(() => configStore.getAvailableElos(props.maxElo))
 
 // ============================================
 // VISIBILIDADE DE SEÇÕES
@@ -184,7 +166,7 @@ const showChampionSelector = computed(() => {
 // HANDLERS - ELO ATUAL
 // ============================================
 const handleCurrentEloSelect = (index: number) => {
-  const elo = allElos[index]
+  const elo = configStore.elosPricing[index]
 
   if (elo?.hasLeagues) {
     modalMode.value = 'current'
@@ -204,7 +186,7 @@ const editCurrentElo = () => {
 // HANDLERS - ELO ALVO
 // ============================================
 const handleTargetEloSelect = (index: number) => {
-  const elo = allElos[index]
+  const elo = configStore.elosPricing[index]
 
   if (elo?.hasLeagues) {
     modalMode.value = 'target'
@@ -251,7 +233,7 @@ const updateSelectedChampions = (champions: Champion[]) => {
 // LÓGICA DE AJUSTE
 // ============================================
 const getEloValue = (elo: number, division: number) => {
-  const eloData = allElos[elo]
+  const eloData = configStore.elosPricing[elo]
   if (!eloData?.hasLeagues) return elo * 10
   return elo * 10 + (3 - division)
 }
@@ -284,7 +266,7 @@ const divisions = computed(() => {
   }
 
   for (let i = currentElo.value; i <= targetElo.value; i++) {
-    const eloData = allElos[i]
+    const eloData = configStore.elosPricing[i]
 
     if (i === currentElo.value) {
       if (eloData?.hasLeagues) {
@@ -315,13 +297,13 @@ const basePrice = computed(() => {
 
   if (currentElo.value === targetElo.value) {
     const divCount = currentDivision.value! - targetDivision.value!
-    const elo = allElos[currentElo.value]
+    const elo = configStore.elosPricing[currentElo.value]
     const price = elo?.basePrice ? elo.basePrice * divCount : 0
     return price
   }
 
   for (let i = currentElo.value; i <= targetElo.value; i++) {
-    const eloData = allElos[i]
+    const eloData = configStore.elosPricing[i]
 
     if (!eloData) continue
 
@@ -356,16 +338,16 @@ const basePrice = computed(() => {
 
 const finalPrice = computed(() => {
   let price = basePrice.value
-  if (options.value.express) price *= 1.3
-  if (options.value.badMMR) price *= 1.25
-  if (options.value.specificChampions) price *= 1.3
-  if (options.value.role) price *= 1.0
+  if (options.value.express) price *= configStore.multipliers.express
+  if (options.value.badMMR) price *= configStore.multipliers.badMMR
+  if (options.value.specificChampions) price *= configStore.multipliers.specificChampions
+  if (options.value.role) price *= configStore.multipliers.role
   return parseFloat(price.toFixed(2))
 })
 
 const estimatedTime = computed(() => {
-  let days = divisions.value * 0.5
-  if (options.value.express) days = Math.ceil(days * 0.6)
+  let days = divisions.value * configStore.settings.baseDaysPerDivision
+  if (options.value.express) days = Math.ceil(days * configStore.settings.expressTimeMultiplier)
 
   const minDays = Math.max(1, Math.floor(days))
   const maxDays = Math.max(minDays + 1, Math.ceil(days * 1.5))
@@ -376,7 +358,7 @@ const estimatedTime = computed(() => {
 // Labels para exibição
 const currentEloLabel = computed(() => {
   if (currentElo.value === null || currentDivision.value === null) return ''
-  const elo = allElos[currentElo.value]
+  const elo = configStore.elosPricing[currentElo.value]
   if (!elo?.hasLeagues) return elo?.label
   const divisionLabels = ['I', 'II', 'III', 'IV']
   return `${elo.label} ${divisionLabels[currentDivision.value]}`
@@ -384,7 +366,7 @@ const currentEloLabel = computed(() => {
 
 const targetEloLabel = computed(() => {
   if (targetElo.value === null || targetDivision.value === null) return ''
-  const elo = allElos[targetElo.value]
+  const elo = configStore.elosPricing[targetElo.value]
   if (!elo?.hasLeagues) return elo?.label
   const divisionLabels = ['I', 'II', 'III', 'IV']
   return `${elo.label} ${divisionLabels[targetDivision.value]}`
@@ -410,26 +392,6 @@ const emitUpdate = () => {
 }
 
 watch([options], emitUpdate, { deep: true })
-
-// Resetar rotas quando a opção for desmarcada
-// watch(
-//   () => options.value.role,
-//   (newValue) => {
-//     if (!newValue) {
-//       selectedRoles.value = ['top', 'jungle', 'mid', 'adc', 'support']
-//     }
-//   },
-// )
-
-// Resetar campeões quando a opção for desmarcada
-// watch(
-//   () => options.value.specificChampions,
-//   (newValue) => {
-//     if (!newValue) {
-//       selectedChampions.value = []
-//     }
-//   },
-// )
 </script>
 
 <style scoped>
