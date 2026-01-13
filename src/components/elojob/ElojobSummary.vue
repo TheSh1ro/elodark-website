@@ -41,13 +41,18 @@
 
         <!-- Mostra campeões apenas se a opção estiver ativa E houver campeões selecionados -->
         <div v-if="showChampions" class="summary-item summary-item-full">
-          <span class="summary-label">Campeões</span>
-          <div v-if="selectedChampions.length" class="champions-list">
-            <span v-for="champion in selectedChampions" :key="champion.id" class="champion-tag">
-              {{ champion.name }}
-            </span>
+          <span class="summary-label">Champion Pool</span>
+          <div v-if="selectedChampions.length" class="summary-value">
+            {{ selectedChampions.length + ' campeões' }}
           </div>
-          <div v-else class="summary-value">
+          <div
+            v-else
+            class="summary-value"
+            :class="{
+              'warning-color':
+                props.additionalOptions.specificChampions && selectedChampions.length === 0,
+            }"
+          >
             {{ !props.additionalOptions.specificChampions ? 'Qualquer' : 'Aguardando seleção' }}
           </div>
         </div>
@@ -219,6 +224,10 @@ const isValid = computed(() => {
   color: var(--secondary);
 }
 
+.summary-value.warning-color {
+  color: var(--accent);
+}
+
 .summary-row.highlight .summary-value {
   font-size: 1.2rem;
 }
@@ -244,23 +253,6 @@ const isValid = computed(() => {
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.5rem;
-}
-
-.champion-tag {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: white;
-  background: rgba(76, 186, 157, 0.2);
-  border: 1px solid rgba(76, 186, 157, 0.4);
-  padding: 0.3rem 0.8rem;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.champion-tag:hover {
-  background: rgba(76, 186, 157, 0.3);
-  border-color: var(--primary);
 }
 
 .price-display {
