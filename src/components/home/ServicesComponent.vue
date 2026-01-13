@@ -14,6 +14,7 @@
         :features="service.features"
         :buttonText="service.buttonText"
         :route="service.route"
+        @click="handleServiceClick(service)"
       />
     </div>
   </section>
@@ -21,6 +22,12 @@
 
 <script setup lang="ts">
 import ServiceCard from './ServiceCard.vue'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+import { useModal } from '@/composables/useModal'
+const { showModal } = useModal()
 
 const services = [
   {
@@ -39,7 +46,8 @@ const services = [
     description: 'Suba de elo enquanto recebe feedbacks',
     features: ['Absorva enquanto joga', 'Com ou sem Discord', 'Horário combinado', 'Suporte 24/7'],
     buttonText: 'COMEÇAR DUO',
-    route: '/services/duojob',
+    route: null,
+    // route: '/services/duojob',
   },
   {
     badge: null,
@@ -48,9 +56,21 @@ const services = [
     description: 'Compre vitórias e gerencie o seu decay',
     features: ['Agende as partidas', 'Com ou sem duo', 'VPN + Proteção', 'Suporte 24/7'],
     buttonText: 'Comprar vitórias',
-    route: '/services/vitorias',
+    route: null,
+    // route: '/services/wins',
   },
 ]
+
+const handleServiceClick = (service: (typeof services)[0]) => {
+  if (!service.route) {
+    showModal({
+      title: service.name,
+      message: 'Este serviço ainda não está disponível para ser acessado',
+    })
+  } else {
+    router.push(service.route)
+  }
+}
 </script>
 
 <style scoped>

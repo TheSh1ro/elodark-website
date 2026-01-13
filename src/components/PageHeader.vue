@@ -15,8 +15,30 @@
           <span class="dropdown-trigger">Serviços</span>
           <ul v-show="showDropdown" class="dropdown-menu">
             <li><RouterLink to="/services/elojob">Elojob</RouterLink></li>
-            <li><RouterLink to="/services/duojob">Duojob</RouterLink></li>
-            <li><RouterLink to="/services/wins">Vitórias</RouterLink></li>
+            <!-- <li><RouterLink to="/services/duojob">Duojob</RouterLink></li> -->
+            <!-- <li><RouterLink to="/services/wins">Vitórias</RouterLink></li> -->
+            <li>
+              <a
+                @click="
+                  showModal({
+                    title: 'DuoJob',
+                    message: 'Este serviço ainda não está disponível para ser acessado',
+                  })
+                "
+                >DuoJob</a
+              >
+            </li>
+            <li>
+              <a
+                @click="
+                  showModal({
+                    title: 'Vitórias',
+                    message: 'Este serviço ainda não está disponível para ser acessado',
+                  })
+                "
+                >Vitórias</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -46,6 +68,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+import { useModal } from '@/composables/useModal'
+const { showModal } = useModal()
 
 import logo from '@/assets/logo.png'
 

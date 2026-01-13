@@ -14,15 +14,21 @@ const router = createRouter({
       name: 'elojob',
       component: () => import('@/views/ElojobView.vue'),
     },
+    // {
+    //   path: '/services/duojob',
+    //   name: 'duojob',
+    //   component: () => import('@/views/DuojobView.vue'),
+    // },
+    // {
+    //   path: '/services/wins',
+    //   name: 'vitorias',
+    //   component: () => import('@/views/VitoriasView.vue'),
+    // },
+
+    // Rota catch-all: redireciona qualquer URL não encontrada para a home
     {
-      path: '/services/duojob',
-      name: 'duojob',
-      component: () => import('@/views/DuojobView.vue'),
-    },
-    {
-      path: '/services/wins',
-      name: 'vitorias',
-      component: () => import('@/views/VitoriasView.vue'),
+      path: '/:pathMatch(.*)*',
+      redirect: '/',
     },
   ],
   scrollBehavior(to, from, savedPosition) {

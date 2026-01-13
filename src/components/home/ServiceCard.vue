@@ -1,23 +1,21 @@
 <template>
-  <RouterLink :to="route">
-    <div
-      ref="target"
-      :class="{ 'is-visible': isVisible }"
-      :style="{ transitionDelay: `${delay}ms` }"
-      class="service-card"
-    >
-      <div v-if="badge" class="service-badge">{{ badge }}</div>
-      <div class="service-icon">{{ icon }}</div>
-      <h3 class="service-name">{{ name }}</h3>
-      <p class="service-desc">{{ description }}</p>
-      <div class="service-features">
-        <div v-for="(feature, index) in features" :key="index" class="service-feature">
-          {{ feature }}
-        </div>
+  <div
+    ref="target"
+    :class="{ 'is-visible': isVisible }"
+    :style="{ transitionDelay: `${delay}ms` }"
+    class="service-card"
+  >
+    <div v-if="badge" class="service-badge">{{ badge }}</div>
+    <div class="service-icon">{{ icon }}</div>
+    <h3 class="service-name">{{ name }}</h3>
+    <p class="service-desc">{{ description }}</p>
+    <div class="service-features">
+      <div v-for="(feature, index) in features" :key="index" class="service-feature">
+        {{ feature }}
       </div>
-      <button class="service-button">{{ buttonText }}</button>
     </div>
-  </RouterLink>
+    <button class="service-button">{{ buttonText }}</button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -31,7 +29,6 @@ defineProps<{
   features: string[]
   buttonText: string
   delay?: number
-  route: string
 }>()
 
 const { target, isVisible } = useScrollAnimation({
