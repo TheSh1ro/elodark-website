@@ -41,7 +41,7 @@
     <div class="price-display">
       <div class="price-amount">
         <span class="currency">R$</span>
-        <span class="price">{{ price }}</span>
+        <span class="price">{{ price.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</span>
       </div>
     </div>
 
