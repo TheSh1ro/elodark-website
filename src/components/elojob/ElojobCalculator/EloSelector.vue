@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobCalculator\EloSelector.vue -->
 <template>
   <div
     :class="[

@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobHero.vue -->
 <template>
   <section class="elojob-hero">
     <div class="hero-content">

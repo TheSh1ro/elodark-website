@@ -1,3 +1,4 @@
+<!-- src\views\HomeView.vue -->
 <template>
   <ThreeBackground />
   <div class="scanline"></div>

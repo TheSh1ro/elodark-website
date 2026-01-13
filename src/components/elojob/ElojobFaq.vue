@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobFaq.vue -->
 <template>
   <section class="elojob-faq">
     <h2 class="section-title">DÚVIDAS FREQUENTES</h2>

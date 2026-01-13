@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobSummary.vue -->
 <template>
   <div class="summary-card">
     <h3 class="summary-title">Resumo do Pedido</h3>

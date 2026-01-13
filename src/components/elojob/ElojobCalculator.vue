@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobCalculator.vue -->
 <template>
   <section class="calculator-section">
     <div class="calculator-grid">

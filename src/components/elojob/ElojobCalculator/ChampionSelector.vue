@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobCalculator\ChampionSelector.vue -->
 <template>
   <transition name="slide-fade">
     <div v-if="show" class="grid-section">

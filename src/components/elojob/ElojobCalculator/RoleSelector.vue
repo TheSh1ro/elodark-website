@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobCalculator\RoleSelector.vue -->
 <template>
   <transition name="slide-fade">
     <div v-if="show" class="grid-section">

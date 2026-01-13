@@ -1,3 +1,4 @@
+<!-- src\components\elojob\ElojobCalculator\ChampionPickerModal.vue -->
 <template>
   <Transition name="modal">
     <div v-if="modelValue" class="modal-overlay" @click="close">
