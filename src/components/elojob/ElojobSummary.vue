@@ -5,19 +5,36 @@
     <div class="summary-details">
       <div class="summary-divider"></div>
 
-      <div class="summary-item">
-        <span class="summary-label">Divisões</span>
-        <span class="summary-value">{{ divisions }}</span>
-      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">Elo inicial</span>
+          <span class="summary-value">Prata II</span>
+        </div>
 
-      <div class="summary-item">
-        <span class="summary-label">Tempo Estimado</span>
-        <span class="summary-value">{{ estimatedTime }}</span>
-      </div>
+        <div class="summary-item">
+          <span class="summary-label">Elo final</span>
+          <span class="summary-value">Esmeralda II</span>
+        </div>
 
-      <div class="summary-item">
-        <span class="summary-label">Estimativa de início</span>
-        <span class="summary-value">24h</span>
+        <div class="summary-item">
+          <span class="summary-label">Tempo Estimado</span>
+          <span class="summary-value">{{ estimatedTime }}</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Estimativa de início</span>
+          <span class="summary-value">24h</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Rotas</span>
+          <span class="summary-value">NEED TO CODE</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Extras</span>
+          <span class="summary-value">NEED TO CODE</span>
+        </div>
       </div>
     </div>
 
@@ -98,6 +115,12 @@ const isValid = computed(() => {
   font-size: 1.5rem;
   color: var(--secondary);
   font-weight: 700;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
 }
 
 .summary-item {
