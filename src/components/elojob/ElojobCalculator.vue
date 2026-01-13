@@ -365,9 +365,9 @@ const finalPrice = computed(() => {
 })
 
 const estimatedTime = computed(() => {
-  let days = divisions.value * 2
+  let days = divisions.value * 0.5
   if (options.value.express) days = Math.ceil(days * 0.6)
-  return `${days}-${days + 3} dias`
+  return `${Math.floor(days)}-${Math.ceil(days * 1.5)} dias`
 })
 
 // Labels para exibição
