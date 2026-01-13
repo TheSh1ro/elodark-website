@@ -91,11 +91,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 
-export interface Champion {
-  id: string
-  name: string
-  icon: string
-}
+import type { Champion } from '@/types/championTypes'
 
 interface ChampionData {
   id: string

@@ -34,7 +34,7 @@
         @update:model-value="emitUpdate"
       />
 
-      <!-- 5. Seleção de Rotas -->
+      <!-- 5. Seleção de Roles -->
       <RoleSelector
         v-model="selectedRoles"
         :show="showRoleSelector"
@@ -77,9 +77,9 @@ import ChampionSelector from './ElojobCalculator/ChampionSelector.vue'
 // Types
 import type { ServiceData } from '@/types/serviceData'
 import type { EloData } from '@/types/eloData'
-import type { AdditionalOptionsData } from './ElojobCalculator/AdditionalOptions.vue'
-import type { RoleId } from './ElojobCalculator/RoleSelector.vue'
-import type { Champion } from './ElojobCalculator/ChampionSelector.vue'
+import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
+import type { RoleId } from '@/types/roleTypes'
+import type { Champion } from '@/types/championTypes'
 
 // Importar imagens dos ranks
 import emblemIron from '@/assets/emblems-rank/emblem-iron.png'
@@ -120,7 +120,7 @@ const options = ref<AdditionalOptionsData>({
   express: false,
   badMMR: false,
   specificChampions: false,
-  route: false,
+  role: false,
 })
 
 const selectedRoles = ref<RoleId[]>(['top', 'jungle', 'mid', 'adc', 'support'])
@@ -172,7 +172,7 @@ const showAdditionalOptions = computed(() => {
 })
 
 const showRoleSelector = computed(() => {
-  return options.value.route && targetElo.value !== null && targetDivision.value !== null
+  return options.value.role && targetElo.value !== null && targetDivision.value !== null
 })
 
 const showChampionSelector = computed(() => {
@@ -360,14 +360,18 @@ const finalPrice = computed(() => {
   if (options.value.express) price *= 1.3
   if (options.value.badMMR) price *= 1.25
   if (options.value.specificChampions) price *= 1.3
-  if (options.value.route) price *= 1.0
+  if (options.value.role) price *= 1.0
   return parseFloat(price.toFixed(2))
 })
 
 const estimatedTime = computed(() => {
   let days = divisions.value * 0.5
   if (options.value.express) days = Math.ceil(days * 0.6)
-  return `${Math.floor(days)}-${Math.ceil(days * 1.5)} dias`
+
+  const minDays = Math.max(1, Math.floor(days))
+  const maxDays = Math.max(minDays + 1, Math.ceil(days * 1.5))
+
+  return `${minDays}-${maxDays} dias`
 })
 
 // Labels para exibição
@@ -399,30 +403,33 @@ const emitUpdate = () => {
     divisions: divisions.value,
     estimatedTime: estimatedTime.value,
     price: finalPrice.value,
+    selectedRoles: selectedRoles.value,
+    selectedChampions: selectedChampions.value,
+    additionalOptions: options.value,
   })
 }
 
 watch([options], emitUpdate, { deep: true })
 
 // Resetar rotas quando a opção for desmarcada
-watch(
-  () => options.value.route,
-  (newValue) => {
-    if (!newValue) {
-      selectedRoles.value = ['top', 'jungle', 'mid', 'adc', 'support']
-    }
-  },
-)
+// watch(
+//   () => options.value.role,
+//   (newValue) => {
+//     if (!newValue) {
+//       selectedRoles.value = ['top', 'jungle', 'mid', 'adc', 'support']
+//     }
+//   },
+// )
 
 // Resetar campeões quando a opção for desmarcada
-watch(
-  () => options.value.specificChampions,
-  (newValue) => {
-    if (!newValue) {
-      selectedChampions.value = []
-    }
-  },
-)
+// watch(
+//   () => options.value.specificChampions,
+//   (newValue) => {
+//     if (!newValue) {
+//       selectedChampions.value = []
+//     }
+//   },
+// )
 </script>
 
 <style scoped>

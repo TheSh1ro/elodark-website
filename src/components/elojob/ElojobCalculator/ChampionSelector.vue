@@ -43,11 +43,7 @@
 import { ref } from 'vue'
 import ChampionPickerModal from './ChampionPickerModal.vue'
 
-export interface Champion {
-  id: string
-  name: string
-  icon: string
-}
+import type { Champion } from '@/types/championTypes'
 
 interface Props {
   selectedChampions: Champion[]

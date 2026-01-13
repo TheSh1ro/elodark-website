@@ -8,32 +8,40 @@
       <div class="summary-grid">
         <div class="summary-item">
           <span class="summary-label">Elo inicial</span>
-          <span class="summary-value">Prata II</span>
+          <span class="summary-value">{{ currentElo || '--' }}</span>
         </div>
 
         <div class="summary-item">
           <span class="summary-label">Elo final</span>
-          <span class="summary-value">Esmeralda II</span>
+          <span class="summary-value">{{ targetElo || '--' }}</span>
         </div>
 
         <div class="summary-item">
           <span class="summary-label">Tempo Estimado</span>
-          <span class="summary-value">{{ estimatedTime }}</span>
+          <span class="summary-value">{{ estimatedTime || '--' }}</span>
         </div>
 
         <div class="summary-item">
-          <span class="summary-label">Estimativa de início</span>
-          <span class="summary-value">24h</span>
+          <span class="summary-label">Divisões</span>
+          <span class="summary-value">{{ divisions || '--' }}</span>
         </div>
 
-        <div class="summary-item">
-          <span class="summary-label">Rotas</span>
-          <span class="summary-value">NEED TO CODE</span>
+        <!-- Mostra rotas  -->
+        <div class="summary-item summary-item-full">
+          <span class="summary-label">Lanes</span>
+          <span class="summary-value">{{
+            selectedRoles.length === 5 || !props.additionalOptions.role ? 'Todas' : formattedRoles
+          }}</span>
         </div>
 
-        <div class="summary-item">
-          <span class="summary-label">Extras</span>
-          <span class="summary-value">NEED TO CODE</span>
+        <!-- Mostra campeões apenas se a opção estiver ativa E houver campeões selecionados -->
+        <div v-if="showChampions" class="summary-item summary-item-full">
+          <span class="summary-label">Campeões</span>
+          <div class="champions-list">
+            <span v-for="champion in selectedChampions" :key="champion.id" class="champion-tag">
+              {{ champion.name }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -41,7 +49,7 @@
     <div class="price-display">
       <div class="price-amount">
         <span class="currency">R$</span>
-        <span class="price">{{ price.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</span>
+        <span class="price">{{ formattedPrice }}</span>
       </div>
     </div>
 
@@ -53,6 +61,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { RoleId } from '@/types/roleTypes'
+import type { Champion } from '@/types/championTypes'
+import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
 
 const props = defineProps<{
   currentElo: string
@@ -60,12 +71,49 @@ const props = defineProps<{
   divisions: number
   estimatedTime: string
   price: number
+  selectedRoles: RoleId[]
+  selectedChampions: Champion[]
+  additionalOptions: AdditionalOptionsData
 }>()
+
+// Mapeamento de roles para nomes em português
+const roleNames: Record<RoleId, string> = {
+  top: 'Top',
+  jungle: 'JG',
+  mid: 'Mid',
+  adc: 'ADC',
+  support: 'Sup',
+}
+
+// Mostra roles apenas se a opção estiver ativa E houver menos de 5 roles selecionadas
+// const showRoles = computed(() => {
+//   return props.additionalOptions.role && props.selectedRoles.length < 5
+// })
+
+// Mostra campeões apenas se a opção estiver ativa e houver campeões selecionados
+const showChampions = computed(() => {
+  return props.additionalOptions.specificChampions && props.selectedChampions.length > 0
+})
+
+// Formata as roles para exibição
+const formattedRoles = computed(() => {
+  return props.selectedRoles.map((role) => roleNames[role]).join(' / ')
+})
+
+// Formata o preço
+const formattedPrice = computed(() => {
+  return props.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+})
 
 // Verifica se os campos foram preenchidos
 const isValid = computed(() => {
   return (
-    props.currentElo !== '--' && props.targetElo !== '--' && props.divisions > 0 && props.price > 0
+    props.currentElo !== '' &&
+    props.currentElo !== '--' &&
+    props.targetElo !== '' &&
+    props.targetElo !== '--' &&
+    props.divisions > 0 &&
+    props.price > 0
   )
 })
 </script>
@@ -130,6 +178,10 @@ const isValid = computed(() => {
   flex: 1;
 }
 
+.summary-item-full {
+  grid-column: 1 / -1;
+}
+
 .summary-row .summary-item {
   align-items: center;
 }
@@ -150,7 +202,6 @@ const isValid = computed(() => {
 .summary-value {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.05rem;
-  font-weight: 700;
   color: var(--secondary);
 }
 
@@ -171,6 +222,31 @@ const isValid = computed(() => {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(76, 186, 157, 0.3), transparent);
   margin: 0.3rem 0;
+}
+
+/* Estilos para lista de campeões */
+.champions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.champion-tag {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  background: rgba(76, 186, 157, 0.2);
+  border: 1px solid rgba(76, 186, 157, 0.4);
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.champion-tag:hover {
+  background: rgba(76, 186, 157, 0.3);
+  border-color: var(--primary);
 }
 
 .price-display {
@@ -311,6 +387,10 @@ const isValid = computed(() => {
 
   .arrow {
     transform: rotate(90deg);
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

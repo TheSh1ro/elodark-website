@@ -17,6 +17,9 @@
           :divisions="divisions"
           :estimated-time="estimatedTime"
           :price="price"
+          :selected-roles="selectedRoles"
+          :selected-champions="selectedChampions"
+          :additional-options="additionalOptions"
         />
       </div>
     </div>
@@ -32,12 +35,23 @@ import ElojobFAQ from '@/components/elojob/ElojobFaq.vue'
 import ElojobSummary from '@/components/elojob/ElojobSummary.vue'
 
 import type { ServiceData } from '@/types/serviceData'
+import type { RoleId } from '@/types/roleTypes'
+import type { Champion } from '@/types/championTypes'
+import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
 
-const currentElo = ref('--')
-const targetElo = ref('--')
+const currentElo = ref('')
+const targetElo = ref('')
 const divisions = ref(0)
-const estimatedTime = ref('--:--')
+const estimatedTime = ref('')
 const price = ref(0)
+const selectedRoles = ref<RoleId[]>(['top', 'jungle', 'mid', 'adc', 'support'])
+const selectedChampions = ref<Champion[]>([])
+const additionalOptions = ref<AdditionalOptionsData>({
+  express: false,
+  badMMR: false,
+  specificChampions: false,
+  role: false,
+})
 
 const updateData = (data: ServiceData) => {
   currentElo.value = data.currentElo ?? currentElo.value
@@ -45,6 +59,9 @@ const updateData = (data: ServiceData) => {
   divisions.value = data.divisions ?? divisions.value
   estimatedTime.value = data.estimatedTime ?? estimatedTime.value
   price.value = data.price ?? price.value
+  selectedRoles.value = data.selectedRoles ?? selectedRoles.value
+  selectedChampions.value = data.selectedChampions ?? selectedChampions.value
+  additionalOptions.value = data.additionalOptions ?? additionalOptions.value
 }
 </script>
 

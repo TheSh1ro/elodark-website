@@ -25,7 +25,7 @@
         </label>
       </div>
       <p v-if="modelValue.length < 2" class="role-warning">
-        ⚠️ Selecione pelo menos 2 rotas para continuar
+        Selecione pelo menos 2 rotas para continuar
       </p>
     </div>
   </transition>
@@ -40,7 +40,7 @@ import iconMidlaner from '@/assets/icons-role/mid.png'
 import iconJungler from '@/assets/icons-role/jungle.png'
 import iconToplaner from '@/assets/icons-role/top.png'
 
-export type RoleId = 'top' | 'jungle' | 'mid' | 'adc' | 'support'
+import type { RoleId } from '@/types/roleTypes'
 
 interface Role {
   id: RoleId

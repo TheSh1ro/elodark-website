@@ -7,7 +7,7 @@
       </h3>
       <div class="options-list">
         <label class="option-item">
-          <input type="checkbox" :checked="modelValue.route" @change="toggleOption('route')" />
+          <input type="checkbox" :checked="modelValue.role" @change="toggleOption('role')" />
           <div class="option-content">
             <div class="option-header">
               <span class="option-icon">★</span>
@@ -73,12 +73,7 @@
 </template>
 
 <script setup lang="ts">
-export interface AdditionalOptionsData {
-  express: boolean
-  badMMR: boolean
-  specificChampions: boolean
-  route: boolean
-}
+import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
 
 interface Props {
   modelValue: AdditionalOptionsData
