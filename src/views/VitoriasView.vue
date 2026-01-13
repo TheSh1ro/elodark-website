@@ -17,6 +17,10 @@
           :divisions="divisions"
           :estimated-time="estimatedTime"
           :price="price"
+          :selected-roles="selectedRoles"
+          :selected-champions="selectedChampions"
+          :additional-options="additionalOptions"
+          :queue-type="queueType"
         />
       </div>
     </div>
@@ -32,12 +36,25 @@ import ElojobFAQ from '@/components/elojob/ElojobFaq.vue'
 import ElojobSummary from '@/components/elojob/ElojobSummary.vue'
 
 import type { ServiceData } from '@/types/serviceData'
+import type { RoleId } from '@/types/roleTypes'
+import type { Champion } from '@/types/championTypes'
+import type { AdditionalOptionsData } from '@/types/additionalOptionsTypes'
+import type { QueueType } from '@/types/queueTypes'
 
-const currentElo = ref('--')
-const targetElo = ref('--')
+const currentElo = ref('')
+const targetElo = ref('')
 const divisions = ref(0)
-const estimatedTime = ref('--:--')
+const estimatedTime = ref('')
 const price = ref(0)
+const selectedRoles = ref<RoleId[]>(['top', 'jungle', 'mid', 'adc', 'support'])
+const selectedChampions = ref<Champion[]>([])
+const additionalOptions = ref<AdditionalOptionsData>({
+  express: false,
+  badMMR: false,
+  specificChampions: false,
+  role: false,
+})
+const queueType = ref<QueueType>('solo')
 
 const updateData = (data: ServiceData) => {
   currentElo.value = data.currentElo ?? currentElo.value
@@ -45,6 +62,10 @@ const updateData = (data: ServiceData) => {
   divisions.value = data.divisions ?? divisions.value
   estimatedTime.value = data.estimatedTime ?? estimatedTime.value
   price.value = data.price ?? price.value
+  selectedRoles.value = data.selectedRoles ?? selectedRoles.value
+  selectedChampions.value = data.selectedChampions ?? selectedChampions.value
+  additionalOptions.value = data.additionalOptions ?? additionalOptions.value
+  queueType.value = data.queueType ?? queueType.value
 }
 </script>
 
@@ -60,7 +81,8 @@ const updateData = (data: ServiceData) => {
 
 .elojob-page {
   min-height: 100vh;
-  padding: 8rem 3rem 3rem;
+  padding: calc(75px + 1rem) 3rem 8rem 3rem;
+  /* padding: 8rem 3rem 3rem; */
 }
 
 .elojob-container {
@@ -80,7 +102,7 @@ const updateData = (data: ServiceData) => {
 
 .elojob-right {
   position: sticky;
-  top: 100px;
+  top: 5rem;
 }
 
 /* Tablets e dispositivos menores */
