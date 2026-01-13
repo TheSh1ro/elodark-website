@@ -433,7 +433,7 @@ watch(
   align-content: start;
   gap: 3rem;
   width: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 75px);
 }
 
 .calculator-grid {

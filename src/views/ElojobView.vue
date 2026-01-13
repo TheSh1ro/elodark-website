@@ -60,7 +60,7 @@ const updateData = (data: ServiceData) => {
 
 .elojob-page {
   min-height: 100vh;
-  padding: 75px 3rem 8rem 3rem;
+  padding: calc(75px + 1rem) 3rem 8rem 3rem;
   /* padding: 8rem 3rem 3rem; */
 }
 
