@@ -128,11 +128,12 @@ const formattedPrice = computed(() => {
 const isValid = computed(() => {
   return (
     props.currentElo !== '' &&
-    props.currentElo !== '--' &&
     props.targetElo !== '' &&
-    props.targetElo !== '--' &&
     props.divisions > 0 &&
-    props.price > 0
+    props.price > 0 &&
+    (props.queueType == 'solo' || props.queueType == 'flex') &&
+    ((props.additionalOptions.specificChampions && props.selectedChampions.length > 0) ||
+      !props.additionalOptions.specificChampions)
   )
 })
 </script>
