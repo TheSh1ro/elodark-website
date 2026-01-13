@@ -359,7 +359,7 @@ const finalPrice = computed(() => {
   let price = basePrice.value
   if (options.value.express) price *= 1.3
   if (options.value.badMMR) price *= 1.25
-  if (options.value.specificChampions) price *= 1.2
+  if (options.value.specificChampions) price *= 1.3
   if (options.value.route) price *= 1.0
   return parseFloat(price.toFixed(2))
 })

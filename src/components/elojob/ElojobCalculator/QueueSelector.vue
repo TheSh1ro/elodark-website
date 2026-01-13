@@ -94,7 +94,7 @@ const selectQueue = (queue: string) => {
   font-family: 'Orbitron', sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: white;
+  color: whitesmoke;
 }
 
 @media (max-width: 768px) {

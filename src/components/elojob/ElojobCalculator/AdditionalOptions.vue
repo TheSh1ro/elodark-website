@@ -59,7 +59,7 @@
             <div class="option-header">
               <span class="option-icon">★</span>
               <span class="option-name">Campeões Específicos</span>
-              <span class="option-badge">+20%</span>
+              <span class="option-badge">+30%</span>
             </div>
             <p class="option-description">
               Escolha quais campeões serão utilizados no boost, útil se você for monochampion ou
@@ -148,14 +148,16 @@ const toggleOption = (key: keyof AdditionalOptionsData) => {
 
 .option-icon {
   font-size: 1.3rem;
+  color: var(--accent);
 }
 
 .option-name {
   font-family: 'Orbitron', sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: white;
+  color: var(--accent);
   flex: 1;
+  text-transform: uppercase;
 }
 
 .option-badge {
