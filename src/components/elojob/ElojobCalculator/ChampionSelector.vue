@@ -29,20 +29,19 @@
         </transition>
       </div>
 
-      <!-- Modal placeholder - será implementado depois -->
-      <div v-if="showModal" class="modal-overlay" @click="closeModal">
-        <div class="modal-content" @click.stop>
-          <h3 class="modal-title">Selecionar Campeões</h3>
-          <p class="modal-placeholder">Modal de seleção de campeões ainda será criado ;/</p>
-          <button class="modal-close" @click="closeModal">✕</button>
-        </div>
-      </div>
+      <!-- Champion Picker Modal -->
+      <ChampionPickerModal
+        v-model="showModal"
+        :selected-champions="selectedChampions"
+        @confirm="handleConfirm"
+      />
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import ChampionPickerModal from './ChampionPickerModal.vue'
 
 export interface Champion {
   id: string
@@ -64,37 +63,12 @@ const emit = defineEmits<Emits>()
 
 const showModal = ref(false)
 
-// TEMPORÁRIO: Dados de exemplo para visualização
-// Remover quando o modal estiver implementado
-const exampleChampions: Champion[] = [
-  {
-    id: '1',
-    name: 'Yasuo',
-    icon: 'https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/Yasuo.png',
-  },
-  {
-    id: '2',
-    name: 'Zed',
-    icon: 'https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/Zed.png',
-  },
-  {
-    id: '3',
-    name: 'Lee Sin',
-    icon: 'https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/LeeSin.png',
-  },
-]
-
 const openModal = () => {
-  // TEMPORÁRIO: Adicionar campeões de exemplo ao abrir modal
-  // Remover quando o modal real estiver implementado
-  if (props.selectedChampions.length === 0) {
-    emit('update:selectedChampions', exampleChampions)
-  }
   showModal.value = true
 }
 
-const closeModal = () => {
-  showModal.value = false
+const handleConfirm = (champions: Champion[]) => {
+  emit('update:selectedChampions', champions)
 }
 
 const removeChampion = (championId: string) => {
@@ -209,71 +183,6 @@ const removeChampion = (championId: string) => {
 .remove-champion:hover {
   background: #ff0000;
   transform: scale(1.1);
-}
-
-/* Modal Placeholder */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 1rem;
-}
-
-.modal-content {
-  background: var(--dark);
-  border: 2px solid var(--primary);
-  border-radius: 16px;
-  padding: 3rem 2rem;
-  max-width: 500px;
-  width: 100%;
-  position: relative;
-  box-shadow: 0 0 60px rgba(76, 186, 157, 0.4);
-  text-align: center;
-}
-
-.modal-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin: 0 0 1.5rem 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.modal-placeholder {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
-  line-height: 1.6;
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  line-height: 1;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.modal-close:hover {
-  color: var(--primary);
-  transform: scale(1.2);
 }
 
 /* Animações */
