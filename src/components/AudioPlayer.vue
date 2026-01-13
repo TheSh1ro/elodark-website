@@ -132,7 +132,7 @@ watch(volume, () => {
   width: 50px;
   height: 180px;
   background: linear-gradient(145deg, rgba(10, 14, 26, 0.98), rgba(15, 20, 35, 0.98));
-  border: 2px solid var(--primary);
+  border: 2px solid var(--accent);
   margin-bottom: 0.75rem;
   display: flex;
   flex-direction: column;
@@ -162,7 +162,7 @@ watch(volume, () => {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 
 .volume-track {
@@ -182,8 +182,8 @@ watch(volume, () => {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, var(--primary), var(--secondary));
-  box-shadow: 0 0 10px var(--primary);
+  background: linear-gradient(to top, var(--accent), var(--secondary));
+  box-shadow: 0 0 10px var(--accent);
   transition: height 0.1s ease;
 }
 
@@ -207,29 +207,29 @@ watch(volume, () => {
   appearance: none;
   width: 16px;
   height: 16px;
-  background: var(--primary);
+  background: var(--accent);
   border: 2px solid var(--dark);
   cursor: pointer;
-  box-shadow: 0 0 12px var(--primary);
+  box-shadow: 0 0 12px var(--accent);
   clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
 
 .volume-slider-vertical::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: var(--primary);
+  background: var(--accent);
   border: 2px solid var(--dark);
   cursor: pointer;
-  box-shadow: 0 0 12px var(--primary);
+  box-shadow: 0 0 12px var(--accent);
   border-radius: 0;
 }
 
 .volume-percentage {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.7rem;
-  color: var(--primary);
+  color: var(--accent);
   letter-spacing: 1px;
-  text-shadow: 0 0 8px var(--primary);
+  text-shadow: 0 0 8px var(--accent);
   margin-top: -7px;
   margin-left: 5px;
 }
@@ -239,12 +239,12 @@ watch(volume, () => {
   width: 60px;
   height: 60px;
   background: linear-gradient(145deg, rgba(10, 14, 26, 0.98), rgba(15, 20, 35, 0.98));
-  border: 2px solid var(--primary);
+  border: 2px solid var(--accent);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  color: var(--accent);
   clip-path: polygon(
     0 10px,
     10px 0,
@@ -276,7 +276,7 @@ watch(volume, () => {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 2px solid var(--primary);
+  border: 2px solid var(--accent);
   clip-path: polygon(
     0 10px,
     10px 0,
@@ -337,8 +337,8 @@ watch(volume, () => {
 
 .bar {
   width: 4px;
-  background: var(--primary);
-  box-shadow: 0 0 10px var(--primary);
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
   animation: equalize 0.8s ease-in-out infinite;
 }
 
