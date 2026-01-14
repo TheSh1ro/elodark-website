@@ -1,3 +1,4 @@
+<!-- src\components\home\LoginPanel.vue -->
 <template>
   <div>
     <!-- Backdrop -->
@@ -110,7 +111,11 @@
 
         <!-- Social Login -->
         <div class="social-login">
-          <button class="btn-social btn-google" @click="handleSocialLogin('google')">
+          <button
+            class="btn-social btn-google"
+            style="color: var(--accent); border-color: var(--accent)"
+            @click="handleSocialLogin('google')"
+          >
             <svg width="20" height="20" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -155,6 +160,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 
 interface Props {
   modelValue: boolean
@@ -163,7 +169,6 @@ interface Props {
 interface Emits {
   (e: 'update:modelValue', value: boolean): void
   (e: 'login', data: FormData): void
-  (e: 'socialLogin', provider: string): void
   (e: 'register'): void
   (e: 'forgotPassword'): void
 }
@@ -177,6 +182,14 @@ interface FormData {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+// ============================================
+// AUTH STORE
+// ============================================
+const authStore = useAuthStore()
+
+// ============================================
+// STATE
+// ============================================
 const isOpen = ref(props.modelValue)
 const showPassword = ref(false)
 const isLoading = ref(false)
@@ -193,12 +206,27 @@ watch(
     isOpen.value = newValue
     if (newValue) {
       document.body.style.overflow = 'hidden'
+      // Limpa erro do authStore ao abrir
+      authStore.clearError()
     } else {
       document.body.style.overflow = ''
     }
   },
 )
 
+// Fecha modal automaticamente quando login for bem-sucedido
+watch(
+  () => authStore.isAuthenticated,
+  (isAuth) => {
+    if (isAuth && isOpen.value) {
+      closePanel()
+    }
+  },
+)
+
+// ============================================
+// METHODS
+// ============================================
 const closePanel = () => {
   emit('update:modelValue', false)
 }
@@ -214,7 +242,13 @@ const handleLogin = () => {
 }
 
 const handleSocialLogin = (provider: string) => {
-  emit('socialLogin', provider)
+  if (provider === 'google') {
+    // ✅ Usa o authStore para login OAuth
+    authStore.loginWithGoogle()
+  } else if (provider === 'discord') {
+    // ✅ Usa o authStore (vai mostrar mensagem "em breve")
+    authStore.loginWithDiscord()
+  }
 }
 
 const handleRegister = () => {
@@ -226,7 +260,9 @@ const handleForgotPassword = () => {
   emit('forgotPassword')
 }
 
-// Close on Escape key
+// ============================================
+// KEYBOARD
+// ============================================
 const handleEscape = (e: KeyboardEvent) => {
   if (e.key === 'Escape' && isOpen.value) {
     closePanel()
