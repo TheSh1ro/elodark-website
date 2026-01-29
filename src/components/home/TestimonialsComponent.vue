@@ -33,10 +33,10 @@ const testimonials = [
     text: 'Melhor serviço de boost que já usei. A velocidade em que o booster subiu a conta foi demais, e deu pra assistir cada partida. Suporte nota 10!',
   },
   {
-    avatar: 'S',
-    name: 'Surfis',
-    stars: 3,
-    text: 'Comprei uma smurf na elodark e os cara falou que n ia me dar conta nenhuma e me chamou de negueba',
+    avatar: 'O',
+    name: 'PZZang',
+    stars: 5,
+    text: 'Excelente serviço, tinha esquecido como dava airblade e fiquei por muito tempo preso no gold..',
   },
 ]
 </script>
