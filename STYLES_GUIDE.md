@@ -647,7 +647,6 @@ Implementado em `App.vue` através da função `handleMouseMove`. Cria pequenas 
 - [ ] Implementar responsividade (breakpoints 480px, 768px)
 - [ ] Respeitar hierarquia de tamanhos de fonte
 - [ ] Usar `scoped` styles em componentes Vue
-- [ ] Validar acessibilidade (contraste mínimo de cores)
 
 ---
 
@@ -679,8 +678,3 @@ box-shadow: 0 0 20px var(--primary);
   /* Mobile */
 }
 ```
-
----
-
-**Última atualização:** Janeiro 2026
-**Mantido por:** Equipe de Desenvolvimento ELO Job

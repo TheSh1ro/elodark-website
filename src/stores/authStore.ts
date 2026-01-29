@@ -87,7 +87,8 @@ export const useAuthStore = defineStore(
           client_id: GOOGLE_CLIENT_ID,
           redirect_uri: GOOGLE_REDIRECT_URI,
           response_type: 'code',
-          scope: 'openid email profile',
+          scope:
+            'openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
           access_type: 'offline',
           prompt: 'select_account',
         })
